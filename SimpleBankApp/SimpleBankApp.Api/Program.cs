@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using SimpleBankApp.Api.Errors;
 using SimpleBankApp.Application.Common;
 using SimpleBankApp.Infrastructure.Common;
 
@@ -13,6 +15,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<ProblemDetailsFactory, SimpleBankAppProblemDetailsFactory>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,6 +25,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandler("/error");
 
 app.UseAuthorization();
 
