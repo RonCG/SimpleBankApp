@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using SimpleBankApp.Api.Errors;
+using SimpleBankApp.Api.Common.Errors;
 using SimpleBankApp.Application.Common;
 using SimpleBankApp.Infrastructure.Common;
 

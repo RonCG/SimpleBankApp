@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
+using ErrorOr;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
+using SimpleBankApp.Api.Common.Http;
 
-namespace SimpleBankApp.Api.Errors;
+namespace SimpleBankApp.Api.Common.Errors;
 
 /// <summary>
 /// The `DefaultProblemDetailsFactory` is a concrete implementation of the `ProblemDetailsFactory` abstract class.
@@ -100,7 +102,11 @@ public sealed class SimpleBankAppProblemDetailsFactory : ProblemDetailsFactory
             problemDetails.Extensions["traceId"] = traceId;
         }
 
-        problemDetails.Extensions.Add("Custom Property", "Custom value");
+        var errors = httpContext?.Items[HttpContextItemKeys.Errors] as List<Error>;
+        if(errors is not null)
+        {
+            problemDetails.Extensions.Add("errorCodes", errors.Select(e => e.Code));
+        }
 
     }
 }

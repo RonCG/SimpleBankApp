@@ -1,6 +1,8 @@
-﻿using SimpleBankApp.Application.Authentication.Models;
+﻿using ErrorOr;
+using SimpleBankApp.Application.Authentication.Models;
 using SimpleBankApp.Application.Common.Interfaces.Authentication;
 using SimpleBankApp.Application.Common.Interfaces.Persistance;
+using SimpleBankApp.Domain.Common.Errors;
 using SimpleBankApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -23,13 +25,13 @@ namespace SimpleBankApp.Application.Authentication.Services
             _userRepository = userRepository;
         }
 
-        public async Task<RegisterResult> Register(string firstName, string lastName, string email, string password)
+        public async Task<ErrorOr<RegisterResult>> Register(string firstName, string lastName, string email, string password)
         {
             //check if user exists
             var existingUser = await _userRepository.GetUserByEmailAsync(email);
             if(existingUser != null)
             {
-                throw new Exception("User already exists");
+                return Errors.User.ExistingUser;
             }
 
             var newUser = new User()
@@ -52,12 +54,12 @@ namespace SimpleBankApp.Application.Authentication.Services
             return registerResult;
         }
 
-        public async Task<LoginResult> Login(string email, string password)
+        public async Task<ErrorOr<LoginResult>> Login(string email, string password)
         {
             var user = await _userRepository.GetUserByEmailAsync(email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                throw new Exception("Invalid credentials");
+                return Errors.Authentication.InvalidCredentials;
             }
 
             var loginResult = new LoginResult
