@@ -1,8 +1,10 @@
 using ErrorOr;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using SimpleBankApp.Api.Contracts.Authentication.Request;
 using SimpleBankApp.Api.Contracts.Authentication.Response;
-using SimpleBankApp.Application.Authentication.Models;
+using SimpleBankApp.Application.Authentication.Models.Inputs;
+using SimpleBankApp.Application.Authentication.Models.Results;
 using SimpleBankApp.Application.Authentication.Services;
 
 namespace SimpleBankApp.Api.Controllers
@@ -11,48 +13,40 @@ namespace SimpleBankApp.Api.Controllers
     public class AuthenticationController : ApiController
     {
         private readonly ILogger<AuthenticationController> _logger;
+        private readonly IMapper _mapper;
+
         private readonly IAuthenticationService _authenticationService;
 
         public AuthenticationController(
-            ILogger<AuthenticationController> logger, 
-            IAuthenticationService authenticationService)
-        {   
+            ILogger<AuthenticationController> logger,
+            IAuthenticationService authenticationService,
+            IMapper mapper)
+        {
+            _logger = logger;   
+            _mapper = mapper;
             _authenticationService = authenticationService;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest) 
         {
-            ErrorOr<RegisterResult> result = await _authenticationService.Register(registerRequest.FirstName, registerRequest.LastName, registerRequest.Email, registerRequest.Password);
+            RegisterInput registerInput = _mapper.Map<RegisterInput>(registerRequest);
+            ErrorOr<RegisterResult> result = await _authenticationService.Register(registerInput);
 
-            return 
-                result.Match(
-                    result => Ok(new RegisterResponse
-                    {
-                        FirstName = result.FirstName,
-                        LastName = result.LastName,
-                        Email = result.Email
-                    }),
-                    errors => Problem(errors)       
-                 );
+            return result.Match(
+                registerResult => Ok(_mapper.Map<RegisterResponse>(registerResult)),
+                errors => Problem(errors));
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {
-            var result = await _authenticationService.Login(loginRequest.Email, loginRequest.Password);
+            LoginInput loginInput = _mapper.Map<LoginInput>(loginRequest);
+            ErrorOr<LoginResult> result = await _authenticationService.Login(loginInput);
 
-            return
-               result.Match(
-                   result => Ok(new LoginResponse
-                   {
-                       FirstName = result.FirstName,
-                       LastName = result.LastName,
-                       Email = result.Email,
-                       Token = result.Token
-                   }),
-                   errors => Problem(errors)
-                );
+            return result.Match(
+                loginResult => Ok(_mapper.Map<LoginResponse>(loginResult)),
+                errors => Problem(errors));
         }
 
     }

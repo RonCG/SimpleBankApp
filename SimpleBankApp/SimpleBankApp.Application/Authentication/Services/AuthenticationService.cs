@@ -1,14 +1,11 @@
 ﻿using ErrorOr;
-using SimpleBankApp.Application.Authentication.Models;
+using SimpleBankApp.Application.Authentication.Models.Inputs;
+using SimpleBankApp.Application.Authentication.Models.Results;
 using SimpleBankApp.Application.Common.Interfaces.Authentication;
 using SimpleBankApp.Application.Common.Interfaces.Persistance;
 using SimpleBankApp.Domain.Common.Errors;
 using SimpleBankApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SimpleBankApp.Application.Authentication.Services
 {
@@ -25,10 +22,10 @@ namespace SimpleBankApp.Application.Authentication.Services
             _userRepository = userRepository;
         }
 
-        public async Task<ErrorOr<RegisterResult>> Register(string firstName, string lastName, string email, string password)
+        public async Task<ErrorOr<RegisterResult>> Register(RegisterInput registerInput)
         {
             //check if user exists
-            var existingUser = await _userRepository.GetUserByEmailAsync(email);
+            var existingUser = await _userRepository.GetUserByEmailAsync(registerInput.Email);
             if(existingUser != null)
             {
                 return Errors.User.ExistingUser;
@@ -36,28 +33,28 @@ namespace SimpleBankApp.Application.Authentication.Services
 
             var newUser = new User()
             {
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                Password = BCrypt.Net.BCrypt.HashPassword(password)
+                FirstName = registerInput.FirstName,
+                LastName = registerInput.LastName,
+                Email = registerInput.Email,
+                Password = BCrypt.Net.BCrypt.HashPassword(registerInput.Password)
             };
 
             await _userRepository.AddAsync(newUser);
 
             var registerResult = new RegisterResult
             {
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
+                FirstName = registerInput.FirstName,
+                LastName = registerInput.LastName,
+                Email = registerInput.Email,
             };
 
             return registerResult;
         }
 
-        public async Task<ErrorOr<LoginResult>> Login(string email, string password)
+        public async Task<ErrorOr<LoginResult>> Login(LoginInput loginInput)
         {
-            var user = await _userRepository.GetUserByEmailAsync(email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
+            var user = await _userRepository.GetUserByEmailAsync(loginInput.Email);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(loginInput.Password, user.Password))
             {
                 return Errors.Authentication.InvalidCredentials;
             }
@@ -66,7 +63,7 @@ namespace SimpleBankApp.Application.Authentication.Services
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Email = email,
+                Email = user.Email,
                 Token = _jwtTokenGenerator.GenerateToken(user.Id, user.FirstName, user.LastName)
             };
 

@@ -1,21 +1,14 @@
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using SimpleBankApp.Api.Common.Errors;
+using SimpleBankApp.Api.Common;
 using SimpleBankApp.Application.Common;
 using SimpleBankApp.Infrastructure.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddPresentationServices();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddSingleton<ProblemDetailsFactory, SimpleBankAppProblemDetailsFactory>();
 
 var app = builder.Build();
 

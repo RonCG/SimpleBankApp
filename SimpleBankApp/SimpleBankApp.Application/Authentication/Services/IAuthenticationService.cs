@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
-using SimpleBankApp.Application.Authentication.Models;
+using SimpleBankApp.Application.Authentication.Models.Inputs;
+using SimpleBankApp.Application.Authentication.Models.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace SimpleBankApp.Application.Authentication.Services
 {
     public interface IAuthenticationService
     {
-        public Task<ErrorOr<RegisterResult>> Register(string firstName, string lastName, string email, string password);
-        public Task<ErrorOr<LoginResult>> Login(string email, string password);
+        public Task<ErrorOr<RegisterResult>> Register(RegisterInput registerInput);
+        public Task<ErrorOr<LoginResult>> Login(LoginInput loginInput);
     }
 }

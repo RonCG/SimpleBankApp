@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleBankApp.Application.Authentication.Models
+namespace SimpleBankApp.Application.Authentication.Models.Results
 {
     public class LoginResult
     {
