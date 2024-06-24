@@ -15,8 +15,4 @@
     <ProjectReference Include="..\SimpleBankApp.Infrastructure\SimpleBankApp.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contracts\" />
-  </ItemGroup>
-
 </Project>

@@ -1,22 +1,29 @@
 using Microsoft.AspNetCore.Mvc;
+using SimpleBankApp.Api.Contracts.Authentication.Request;
+using SimpleBankApp.Application.Authentication.Services;
 
 namespace SimpleBankApp.Api.Controllers
 {
     [ApiController]
-    [Route("api/auth")]
+    [Route("auth")]
     public class AuthenticationController : ControllerBase
     {
         private readonly ILogger<AuthenticationController> _logger;
 
-        public AuthenticationController(ILogger<AuthenticationController> logger)
+        private readonly IAuthenticationService _authenticationService;
+
+        public AuthenticationController(
+            ILogger<AuthenticationController> logger, 
+            IAuthenticationService authenticationService)
         {
             _logger = logger;
+            _authenticationService = authenticationService;
         }
 
-        [HttpGet("test")]
-        public IActionResult GetTest() 
-        {
-            return Ok(new List<int> { 1, 2, 3});
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] RegisterRequest registerRequest) 
+        {   
+            return Ok(_authenticationService.Register(registerRequest.firstName, registerRequest.lastName, registerRequest.email, registerRequest.password));
         }
 
     }
