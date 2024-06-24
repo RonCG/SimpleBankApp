@@ -19,7 +19,11 @@ namespace SimpleBankApp.Application.Authentication.Services
 
         public RegisterResult Register(string firstName, string lastName, string email, string password)
         {
+            //check if user exists
 
+            //creat user 
+
+            //generate jwt token
             Guid userId = Guid.NewGuid();
             var token = _jWTTokenGenerator.GenerateToken(userId, firstName, lastName);
 
