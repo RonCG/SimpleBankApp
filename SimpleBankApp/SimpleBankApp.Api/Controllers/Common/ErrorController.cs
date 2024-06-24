@@ -17,6 +17,7 @@ namespace SimpleBankApp.Api.Controllers
             _logger = logger;
         }
 
+
         [HttpPost("/error")]
         public IActionResult Error()
         {

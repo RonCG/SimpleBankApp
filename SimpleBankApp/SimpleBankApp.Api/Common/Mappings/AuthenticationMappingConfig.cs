@@ -3,6 +3,7 @@ using SimpleBankApp.Api.Contracts.Authentication.Request;
 using SimpleBankApp.Api.Contracts.Authentication.Response;
 using SimpleBankApp.Application.Authentication.Models.Inputs;
 using SimpleBankApp.Application.Authentication.Models.Results;
+using SimpleBankApp.Domain.Entities;
 
 namespace SimpleBankApp.Api.Common.Mappings
 {

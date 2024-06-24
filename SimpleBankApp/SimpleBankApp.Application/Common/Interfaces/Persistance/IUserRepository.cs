@@ -9,7 +9,7 @@ namespace SimpleBankApp.Application.Common.Interfaces.Persistance
 {
     public interface IUserRepository
     {
-        Task<User?> GetUserByEmailAsync(string email);
-        Task<bool> AddAsync(User user);
+        Task<UserEntity?> GetUserByEmailAsync(string email);
+        Task<bool> AddAsync(UserEntity user);
     }
 }

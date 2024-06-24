@@ -31,7 +31,7 @@ namespace SimpleBankApp.Application.Authentication.Services
                 return Errors.User.ExistingUser;
             }
 
-            var newUser = new User()
+            var newUser = new UserEntity()
             {
                 FirstName = registerInput.FirstName,
                 LastName = registerInput.LastName,

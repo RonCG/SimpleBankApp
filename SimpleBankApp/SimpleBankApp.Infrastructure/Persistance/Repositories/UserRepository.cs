@@ -1,5 +1,8 @@
-﻿using SimpleBankApp.Application.Common.Interfaces.Persistance;
+﻿using LinqToDB;
+using MapsterMapper;
+using SimpleBankApp.Application.Common.Interfaces.Persistance;
 using SimpleBankApp.Domain.Entities;
+using SimpleBankApp.Infrastructure.Persistance.Linq2DB;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,22 +13,29 @@ using System.Threading.Tasks;
 
 namespace SimpleBankApp.Infrastructure.Persistance.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository, IUserRepository
     {
-        public static List<User> users = new List<User>();
+        public static List<UserEntity> users = new List<UserEntity>();
 
-        public Task<bool> AddAsync(User user)
+        private readonly IMapper _mapper;
+
+        public UserRepository(IMapper mapper)
         {
-            users.Add(user);
-
-            return Task.FromResult(true);
+            _mapper = mapper;
         }
 
-        public Task<User?> GetUserByEmailAsync(string email)
+        public async Task<bool> AddAsync(UserEntity userEntity)
         {
-            var user = users.Where(x => x.Email == email).FirstOrDefault();
+            var user = _mapper.Map<User>(userEntity);
+            SetCreateVars(user);
+            var result = await Db.InsertAsync(user);
+            return result > 0;
+        }
 
-            return Task.FromResult(user);
+        public async Task<UserEntity?> GetUserByEmailAsync(string email)
+        {
+            var user = await Db.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
+            return _mapper.Map<UserEntity>(user);
         }
     }
 }
