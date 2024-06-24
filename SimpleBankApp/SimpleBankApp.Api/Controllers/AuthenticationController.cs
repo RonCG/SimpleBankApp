@@ -1,5 +1,6 @@
 using ErrorOr;
 using MapsterMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleBankApp.Api.Contracts.Authentication.Request;
 using SimpleBankApp.Api.Contracts.Authentication.Response;
@@ -10,6 +11,7 @@ using SimpleBankApp.Application.Authentication.Services;
 namespace SimpleBankApp.Api.Controllers
 {
     [Route("auth")]
+    [AllowAnonymous]
     public class AuthenticationController : ApiController
     {
         private readonly ILogger<AuthenticationController> _logger;

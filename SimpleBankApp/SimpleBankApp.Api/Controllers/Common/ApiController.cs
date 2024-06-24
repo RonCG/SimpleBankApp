@@ -1,4 +1,5 @@
 using ErrorOr;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleBankApp.Api.Common.Http;
 using SimpleBankApp.Api.Contracts.Authentication.Request;
@@ -8,6 +9,7 @@ using SimpleBankApp.Application.Authentication.Services;
 namespace SimpleBankApp.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     public class ApiController : ControllerBase
     {
         protected IActionResult Problem(List<Error> errors)
