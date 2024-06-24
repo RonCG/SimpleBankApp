@@ -9,7 +9,7 @@ namespace SimpleBankApp.Application.Authentication.Services
 {
     public interface IAuthenticationService
     {
-        public RegisterResult Register(string firstName, string lastName, string email, string password);
-        public LoginResult Login(string email, string password);
+        public Task<RegisterResult> Register(string firstName, string lastName, string email, string password);
+        public Task<LoginResult> Login(string email, string password);
     }
 }
