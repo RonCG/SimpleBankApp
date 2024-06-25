@@ -4,6 +4,7 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using SimpleBankApp.Api.Common.Errors;
+using SimpleBankApp.Api.Common.Http;
 using SimpleBankApp.Api.Common.Mappings;
 using SimpleBankApp.Api.Contracts.Authentication.Validators;
 using System.Reflection;
@@ -14,6 +15,7 @@ namespace SimpleBankApp.Api.Common
     {
         public static IServiceCollection AddPresentationServices(this IServiceCollection services)
         {
+
             services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
@@ -23,6 +25,9 @@ namespace SimpleBankApp.Api.Common
             services.AddMappings();
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IHttpContextService, HttpContextService>();
 
             return services;
         }

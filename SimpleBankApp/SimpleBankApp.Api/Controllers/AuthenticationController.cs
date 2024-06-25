@@ -10,7 +10,7 @@ using SimpleBankApp.Application.Authentication.Services;
 
 namespace SimpleBankApp.Api.Controllers
 {
-    [Route("auth")]
+    [Route("simple-bank/auth")]
     [AllowAnonymous]
     public class AuthenticationController : ApiController
     {
