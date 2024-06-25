@@ -1,3 +1,7 @@
+Simple .NET 6 web api implemented using TDD and Clean Architecture principles
+
+---
+
 # How to run the application
 Make sure you have docker installed and to run the following commands in the repository root folder.
 
