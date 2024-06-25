@@ -25,7 +25,7 @@ namespace SimpleBankApp.Api.Controllers
             
             //log exception
 
-            return Problem();
+            return Problem(detail: exception.Message);
         }
 
 

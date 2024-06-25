@@ -5,6 +5,7 @@ using SimpleBankApp.Api.Common.Http;
 using SimpleBankApp.Api.Contracts.Authentication.Request;
 using SimpleBankApp.Api.Contracts.Authentication.Response;
 using SimpleBankApp.Application.Authentication.Services;
+using System.Security.Claims;
 
 namespace SimpleBankApp.Api.Controllers
 {
@@ -14,7 +15,10 @@ namespace SimpleBankApp.Api.Controllers
     {
         protected IActionResult Problem(List<Error> errors)
         {
-            HttpContext.Items[HttpContextItemKeys.Errors] = errors;
+            if (errors == null || errors.Count == 0)
+            {
+                return Problem(statusCode: 500);
+            }
 
             var firstError = errors[0];
             var statusCode = firstError.Type switch
@@ -28,7 +32,6 @@ namespace SimpleBankApp.Api.Controllers
 
             return Problem(statusCode: statusCode, title: firstError.Description);
         }
-
 
     }
 }
