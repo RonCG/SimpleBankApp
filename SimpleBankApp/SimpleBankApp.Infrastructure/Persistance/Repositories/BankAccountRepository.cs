@@ -28,5 +28,14 @@ namespace SimpleBankApp.Infrastructure.Persistance.Repositories
             return result > 0 ? _mapper.Map<BankAccountEntity>(bankAccount) : null;
         }
 
+        public Task<BankAccountEntity?> UpdateAsync(BankAccountEntity user)
+        {
+            return Task.FromResult(new BankAccountEntity());
+        }
+
+        public Task<BankAccountEntity?> GetBankAccount(Guid accountId, Guid userId)
+        {
+            return Task.FromResult(new BankAccountEntity());
+        }
     }
 }
