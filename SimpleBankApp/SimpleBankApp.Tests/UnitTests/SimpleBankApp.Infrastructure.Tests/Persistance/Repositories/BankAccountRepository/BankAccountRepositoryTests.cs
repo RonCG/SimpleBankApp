@@ -28,14 +28,13 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Infrastructure.Tests.Persi
         }
 
         [Fact]
-        public async Task AddAsync_ShouldReturnBankAccountEntity()
+        public async Task BankAccountRepository_WhenBankAccountIsCreated_ReturnsCreatedBankAccountEntity()
         {
             // Arrange
             var userId = Guid.NewGuid();
             var accountId = Guid.NewGuid();
             var bankAccountEntity = new BankAccountEntity { Id = accountId, UserId = userId, Balance = 1000 };
             var bankAccount = new BankAccount { Id = accountId, UserId = userId, Balance = 1000 };
-            var exception = new Exception();
 
             _mockMapper
                 .Setup(mapper => mapper.Map<BankAccount>(It.IsAny<BankAccountEntity>()))
@@ -51,6 +50,39 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Infrastructure.Tests.Persi
 
             // Act
             var result = await _repository.AddAsync(bankAccountEntity);
+
+            // Assert
+            result.Should().BeEquivalentTo(bankAccountEntity);
+        }
+
+
+        [Fact]
+        public async Task BankAccountRepository_WhenBankAccountIsUpdated_ReturnsUpdatedBankAccountEntity()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var accountId = Guid.NewGuid();
+            var balance = 100;
+            var createdOn = DateTime.Now;
+            var lastUpdatedOn = DateTime.Now;
+
+            var bankAccountEntity = new BankAccountEntity { Id = accountId, UserId = userId, Balance = balance, CreatedOn = createdOn, LastUpdatedOn = lastUpdatedOn };
+            var bankAccount = new BankAccount { Id = accountId, UserId = userId, Balance = balance, CreatedOn = createdOn, LastUpdatedOn = lastUpdatedOn };
+
+            _mockMapper
+                .Setup(mapper => mapper.Map<BankAccount>(bankAccountEntity))
+                .Returns(bankAccount);
+
+            _mockMapper
+                .Setup(mapper => mapper.Map<BankAccountEntity>(bankAccount))
+                .Returns(bankAccountEntity);
+
+            _mockDb
+                .Setup(db => db.UpdateAsync(bankAccount, false))
+                .ReturnsAsync(1);
+
+            // Act
+            var result = await _repository.UpdateAsync(bankAccountEntity);
 
             // Assert
             result.Should().BeEquivalentTo(bankAccountEntity);
