@@ -12,7 +12,7 @@ services:
       - db
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - DBSettings__ConnectionString=Server=db;Database=SimpleBankAppDb;User=sa;Password=Aa12345678!;
+      - DBSettings__ConnectionString=Server=db;Database=SimpleBankDb;User=SimpleBankDbLogin;Password=Aa12345678!;
     networks:
       - simplebankapp-network
 
