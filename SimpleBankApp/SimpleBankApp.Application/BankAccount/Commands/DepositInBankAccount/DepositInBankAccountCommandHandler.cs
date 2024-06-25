@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using MapsterMapper;
 using SimpleBankApp.Application.Common.Interfaces.Persistance;
+using SimpleBankApp.Domain.Common.Errors;
 
 namespace SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount
 {
@@ -19,7 +20,20 @@ namespace SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount
 
         public async Task<ErrorOr<DepositInBankAccountCommandResponse>> Handle(DepositInBankAccountCommand command)
         {
-            return new DepositInBankAccountCommandResponse();
+            var existingBankAccount = await _bankAccountRepository.GetBankAccount(command.AccountId, command.UserId);
+            if(existingBankAccount == null)
+            {
+                return Errors.BankAccount.BankAccountNotFound;
+            }
+
+            existingBankAccount.Balance += command.AmountToDeposit;
+            var bankAccount = await _bankAccountRepository.UpdateAsync(existingBankAccount);
+            if(bankAccount == null)
+            {
+                return Errors.BankAccount.BankAccountNotUpdated;
+            }
+
+            return _mapper.Map<DepositInBankAccountCommandResponse>(bankAccount);
         }
     }
 

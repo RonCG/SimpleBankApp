@@ -71,12 +71,13 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAcco
             var userId = Guid.NewGuid();
             var accountId = Guid.NewGuid();
             var amountToDeposit = 1000;
+            var bankAccount = new BankAccountEntity { Id = accountId };
             var command = new DepositInBankAccountCommand { UserId = userId, AccountId = accountId, AmountToDeposit = amountToDeposit };
             var error =  Errors.BankAccount.BankAccountNotUpdated;
 
             _mockBankAccountRepository
                .Setup(repo => repo.GetBankAccount(It.IsAny<Guid>(), It.IsAny<Guid>()))
-               .ReturnsAsync(It.IsAny<BankAccountEntity>());
+               .ReturnsAsync(bankAccount);
 
             _mockBankAccountRepository
                 .Setup(repo => repo.UpdateAsync(It.IsAny<BankAccountEntity>()))

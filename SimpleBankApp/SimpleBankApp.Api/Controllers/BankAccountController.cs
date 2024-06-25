@@ -54,12 +54,13 @@ namespace SimpleBankApp.Api.Controllers
                 errors => Problem(errors));
         }
 
-        [HttpPost("/deposit")]
+        [HttpPost("deposit")]
         public async Task<IActionResult> DepositInBankAccount([FromBody] DepositInBankAccountRequest request)
         {
             var depositInBankAccountCommand = new DepositInBankAccountCommand
             {
                 UserId = _httpContextService.GetUserId(),
+                AccountId = request.AccountId,
                 AmountToDeposit = request.AmountToDeposit
             };
 

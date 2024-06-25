@@ -28,14 +28,20 @@ namespace SimpleBankApp.Infrastructure.Persistance.Repositories
             return result > 0 ? _mapper.Map<BankAccountEntity>(bankAccount) : null;
         }
 
-        public Task<BankAccountEntity?> UpdateAsync(BankAccountEntity user)
+        public async Task<BankAccountEntity?> UpdateAsync(BankAccountEntity bankAccountEntity)
         {
-            return Task.FromResult(new BankAccountEntity());
+            var bankAccount = _mapper.Map<BankAccount>(bankAccountEntity);
+            var result = await _commonRepository.UpdateAsync(bankAccount);
+            return result > 0 ? _mapper.Map<BankAccountEntity>(bankAccount) : null;
         }
 
-        public Task<BankAccountEntity?> GetBankAccount(Guid accountId, Guid userId)
+        public async Task<BankAccountEntity?> GetBankAccount(Guid accountId, Guid userId)
         {
-            return Task.FromResult(new BankAccountEntity());
+            var bankAccount = await _commonRepository.GetSimpleBankDb().BankAccounts
+                                    .Where(x => x.Id == accountId && x.UserId == userId)
+                                    .FirstOrDefaultAsync();
+
+            return _mapper.Map<BankAccountEntity>(bankAccount);
         }
     }
 }
