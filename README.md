@@ -1,5 +1,5 @@
 # How to run the application
-Make sure you have docker installed
+Make sure you have docker installed and to run the following commands in the repository root folder.
 
 1. Run the docker-compose file:
 ```
