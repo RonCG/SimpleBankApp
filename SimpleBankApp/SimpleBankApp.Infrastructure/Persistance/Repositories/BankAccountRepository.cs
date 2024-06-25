@@ -1,6 +1,5 @@
 ﻿using LinqToDB;
 using MapsterMapper;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using SimpleBankApp.Application.Common.Interfaces.Persistance;
 using SimpleBankApp.Domain.Entities;
 using SimpleBankApp.Infrastructure.Persistance.Linq2DB;
@@ -42,6 +41,11 @@ namespace SimpleBankApp.Infrastructure.Persistance.Repositories
                                     .FirstOrDefaultAsync();
 
             return _mapper.Map<BankAccountEntity>(bankAccount);
+        }
+
+        public Task<bool> DeleteAsync(BankAccountEntity bankAccount)
+        {
+            throw new NotImplementedException();
         }
     }
 }

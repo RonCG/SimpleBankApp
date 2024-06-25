@@ -6,7 +6,7 @@ using SimpleBankApp.Domain.Entities;
 using SimpleBankApp.Domain.Common.Errors;
 using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
 
-namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAccount.Commands.DepositInBankAccount
+namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAccount.Commands.WithdrawFromBankAccount
 {
     public class WithdrawFromBankAccountCommandHandlerTests
     {
@@ -93,7 +93,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAcco
         }
 
         [Fact]
-        public async Task DepositInBankAccountCommand_WhenAccountIsNotFound_ReturnsBankAccountNotFoundError()
+        public async Task WithdrawFromBankAccountCommand_WhenAccountIsNotFound_ReturnsBankAccountNotFoundError()
         {
             // Arrange
             var userId = Guid.NewGuid();
