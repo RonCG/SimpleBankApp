@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  api:
+    container_name: simplebankapp
+    build:
+      context: .
+      dockerfile: DockerFile
+    ports:
+      - "5000:80"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DBSettings__ConnectionString=Server=db;Database=SimpleBankAppDb;User=sa;Password=Aa12345678!;
+    networks:
+      - simplebankapp-network
+
+  db:
+    container_name: simplebankapp-db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "Aa12345678!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1400:1433"
+    networks:
+      - simplebankapp-network
+
+networks:
+  simplebankapp-network:
+    driver: bridge
