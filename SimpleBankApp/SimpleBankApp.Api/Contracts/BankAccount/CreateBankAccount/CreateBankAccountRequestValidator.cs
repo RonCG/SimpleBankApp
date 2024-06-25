@@ -7,8 +7,7 @@ namespace SimpleBankApp.Api.Contracts.BankAccount.CreateBankAccount
         public CreateBankAccountRequestValidator()
         {
             RuleFor(x => x.Balance)
-                .NotEmpty().WithMessage("Balance is required.")
-                .GreaterThanOrEqualTo(0).WithMessage("Balance has to be greater or equal than 0");
+                .GreaterThanOrEqualTo(0).WithMessage("Balance has to be greater or equal to 0");
         }
     }
 }

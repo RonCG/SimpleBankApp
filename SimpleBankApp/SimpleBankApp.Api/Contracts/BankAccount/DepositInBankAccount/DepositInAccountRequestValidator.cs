@@ -8,8 +8,7 @@ namespace SimpleBankApp.Api.Contracts.BankAccount.DepositInBankAccount
         {
             RuleFor(x => x.AccountId).NotEmpty();
             RuleFor(x => x.AmountToDeposit)
-                .NotEmpty().WithMessage("Amount to deposit is required.")
-                .GreaterThanOrEqualTo(0).WithMessage("Amount to deposit has to be greater or equal than 0");
+                .GreaterThan(0).WithMessage("Amount to deposit has to be greater than 0");
         }
     }
 }

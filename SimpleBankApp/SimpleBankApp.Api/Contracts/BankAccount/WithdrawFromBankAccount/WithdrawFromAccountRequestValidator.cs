@@ -8,8 +8,7 @@ namespace SimpleBankApp.Api.Contracts.BankAccount.WithdrawFromBankAccount
         {
             RuleFor(x => x.AccountId).NotEmpty();
             RuleFor(x => x.AmountToWithdraw)
-                .NotEmpty().WithMessage("Amount to withdraw is required.")
-                .GreaterThanOrEqualTo(0).WithMessage("Amount to withdraw has to be greater or equal than 0");
+                .GreaterThan(0).WithMessage("Amount to withdraw has to be greater than 0");
         }
     }
 }

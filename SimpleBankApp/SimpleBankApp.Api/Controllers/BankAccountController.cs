@@ -16,7 +16,6 @@ using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
 namespace SimpleBankApp.Api.Controllers
 {
     [Route("simple-bank/account")]
-    [AllowAnonymous]
     public class BankAccountController : ApiController
     {
         private readonly ILogger<BankAccountController> _logger;

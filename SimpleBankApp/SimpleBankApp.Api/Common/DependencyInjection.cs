@@ -1,12 +1,10 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
-using Mapster;
-using MapsterMapper;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.OpenApi.Models;
 using SimpleBankApp.Api.Common.Errors;
 using SimpleBankApp.Api.Common.Http;
 using SimpleBankApp.Api.Common.Mappings;
-using SimpleBankApp.Api.Contracts.Authentication.Validators;
 using System.Reflection;
 
 namespace SimpleBankApp.Api.Common
@@ -19,8 +17,38 @@ namespace SimpleBankApp.Api.Common
             services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
-            
+            services.AddSwaggerGen(c =>
+            {
+                // Define the Bearer token authentication scheme
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                // Add the requirement to include the Bearer token in all requests
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
+                });
+            });
+
             services.AddSingleton<ProblemDetailsFactory, SimpleBankAppProblemDetailsFactory>();
             services.AddMappings();
             services.AddFluentValidationAutoValidation();
