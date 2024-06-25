@@ -116,7 +116,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAcco
             var currentBalance = 1000;
             var bankAccount = new BankAccountEntity { Id = accountId, Balance = currentBalance };
             var command = new DeleteBankAccountCommand { UserId = userId, AccountId = accountId };
-            var error = Errors.BankAccount.InsufficientFundsForWithdraw;
+            var error = Errors.BankAccount.CannotDeleteWithAvailableFunds;
 
             _mockBankAccountRepository
                .Setup(repo => repo.GetBankAccount(It.IsAny<Guid>(), It.IsAny<Guid>()))

@@ -43,9 +43,11 @@ namespace SimpleBankApp.Infrastructure.Persistance.Repositories
             return _mapper.Map<BankAccountEntity>(bankAccount);
         }
 
-        public Task<bool> DeleteAsync(BankAccountEntity bankAccount)
+        public async Task<bool> DeleteAsync(BankAccountEntity bankAccountEntity)
         {
-            throw new NotImplementedException();
+            var bankAccount = _mapper.Map<BankAccount>(bankAccountEntity);
+            var result = await _commonRepository.DeleteAsync(bankAccount);
+            return result > 0;
         }
     }
 }

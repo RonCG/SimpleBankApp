@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SimpleBankApp.Api.Common.Http;
 using SimpleBankApp.Api.Contracts.BankAccount.DeleteBankAccount;
-using SimpleBankApp.Api.Contracts.BankAccount.WithdrawFromBankAccount;
 using SimpleBankApp.Api.Controllers;
 using SimpleBankApp.Application.Authentication.Services;
 using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
