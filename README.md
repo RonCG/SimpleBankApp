@@ -5,7 +5,7 @@ Make sure you have docker installed and to run the following commands in the rep
 ```
 docker-compose up
 ```
-*This command will build and run the api container at the port 5000 and the db container at the port 1400 by default. If you need to change this, please modify the ports sections of the corresponding container in the docker-compose file
+*This command will build and run the api container at the port 5000 and the db container at the port 1400 by default. If you need to change this, please modify the ports sections of the corresponding container in the docker-compose file.
 
 ---
 2. Copy the db initialization script to the database container:
@@ -54,3 +54,7 @@ POST http://localhost:5000/simple-bank/account
 ---
 
 4. Use the bank account Id generated in the previous step to call any other endpoint in the application. Make sure to always provide the JWT bearer token for authentication.
+
+---
+
+For more details about the design and implementation of the app, please refer to the Documentation.pdf file.
