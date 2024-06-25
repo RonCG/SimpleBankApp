@@ -4,34 +4,39 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using SimpleBankApp.Api.Common.Http;
-using SimpleBankApp.Api.Contracts.BankAccount.Requests;
+using SimpleBankApp.Api.Contracts.BankAccount.CreateBankAccount;
 using SimpleBankApp.Api.Controllers;
 using SimpleBankApp.Application.Authentication.Services;
 using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
+using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
 using SimpleBankApp.Domain.Common.Errors;
 
 
 namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.BankAccount
 {
-    public class BankAccountControllerTests
+    public class BankAccountControllerCreateBankAccountTests
     {
-        private readonly Mock<ICreateBankAccountCommandHandler> _mockCreateBankAccountCommandHandler;
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<IHttpContextService> _mockHttpContextService;
         private readonly BankAccountController _controller;
 
-        public BankAccountControllerTests()
+        private readonly Mock<ICreateBankAccountCommandHandler> _mockCreateBankAccountCommandHandler;
+        private readonly Mock<IDepositInBankAccountCommandHandler> _mockDepositInBankAccountCommandHandler;
+
+        public BankAccountControllerCreateBankAccountTests()
         {
             _mockCreateBankAccountCommandHandler = new Mock<ICreateBankAccountCommandHandler>();
+            _mockDepositInBankAccountCommandHandler = new Mock<IDepositInBankAccountCommandHandler>();
             _mockMapper = new Mock<IMapper>();
             _mockHttpContextService = new Mock<IHttpContextService>();
 
             _controller = new BankAccountController(
                 new Mock<ILogger<BankAccountController>>().Object,
-                new Mock<IAuthenticationService>().Object,
                 _mockMapper.Object,
+                _mockHttpContextService.Object,
+                new Mock<IAuthenticationService>().Object,
                 _mockCreateBankAccountCommandHandler.Object,
-                _mockHttpContextService.Object);
+                _mockDepositInBankAccountCommandHandler.Object);
         }
 
         [Fact]
@@ -96,5 +101,6 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
             var errorResult = Assert.IsType<ObjectResult>(result);
 
         }
+
     }
 }
