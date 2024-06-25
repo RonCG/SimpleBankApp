@@ -1,0 +1,24 @@
+# Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /.
+
+# Copy the solution file and restore the dependencies
+COPY SimpleBankApp/*.sln ./
+COPY SimpleBankApp/SimpleBankApp.Api/*.csproj SimpleBankApp.Api/
+COPY SimpleBankApp/SimpleBankApp.Infrastructure/*.csproj SimpleBankApp.Infrastructure/
+COPY SimpleBankApp/SimpleBankApp.Application/*.csproj SimpleBankApp.Application/
+COPY SimpleBankApp/SimpleBankApp.Domain/*.csproj SimpleBankApp.Domain/
+COPY SimpleBankApp/SimpleBankApp.Tests/*.csproj SimpleBankApp.Tests/
+
+RUN dotnet restore "SimpleBankApp.Api/SimpleBankApp.Api.csproj"
+
+# Copy the entire source code and build the application
+COPY SimpleBankApp/. .
+WORKDIR /SimpleBankApp.Api
+RUN dotnet publish -c Release -o /app/publish
+
+# Stage 2: Run
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "SimpleBankApp.Api.dll"]
