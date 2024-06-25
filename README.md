@@ -48,7 +48,7 @@ POST http://localhost:5000/simple-bank/auth/login
 
 3. Create a bank account:
 ```
-POSThttp://localhost:5000/simple-bank/account
+POST http://localhost:5000/simple-bank/account
 ```
 
 ---
