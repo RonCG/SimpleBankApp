@@ -3,7 +3,7 @@ Simple .NET 6 web api implemented using TDD and Clean Architecture principles
 ---
 
 # How to run the application
-Make sure you have docker installed and to run the following commands in the repository root folder.
+Make sure to clone the repo to your local computer and to have docker installed. After validating this, run the following commands in the repository root folder.
 
 1. Run the docker-compose file:
 ```
@@ -17,13 +17,13 @@ docker-compose up
 docker cp Database/init-db.sql simplebankapp-db:/init-db.sql
 ```
 ---
-3. Run the intialization script using sqlcmd:
+3. Run the db initialization script using sqlcmd:
 
 ```
 docker exec -it simplebankapp-db /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Aa12345678! -i /init-db.sql
 ```
 
-*The database password is the same as in the docker-compose file.
+*The database password should the same as in the docker-compose file.
 
 ---
 
