@@ -9,6 +9,7 @@ using SimpleBankApp.Api.Controllers;
 using SimpleBankApp.Application.Authentication.Services;
 using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
+using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
 using SimpleBankApp.Domain.Common.Errors;
 
 
@@ -22,11 +23,13 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
 
         private readonly Mock<ICreateBankAccountCommandHandler> _mockCreateBankAccountCommandHandler;
         private readonly Mock<IDepositInBankAccountCommandHandler> _mockDepositInBankAccountCommandHandler;
+        private readonly Mock<IWithdrawFromBankAccountCommandHandler> _mockWithdrawFromBankAccountCommandHandler;
 
         public BankAccountControllerCreateBankAccountTests()
         {
             _mockCreateBankAccountCommandHandler = new Mock<ICreateBankAccountCommandHandler>();
             _mockDepositInBankAccountCommandHandler = new Mock<IDepositInBankAccountCommandHandler>();
+            _mockWithdrawFromBankAccountCommandHandler = new Mock<IWithdrawFromBankAccountCommandHandler>();
             _mockMapper = new Mock<IMapper>();
             _mockHttpContextService = new Mock<IHttpContextService>();
 
@@ -36,8 +39,10 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
                 _mockHttpContextService.Object,
                 new Mock<IAuthenticationService>().Object,
                 _mockCreateBankAccountCommandHandler.Object,
-                _mockDepositInBankAccountCommandHandler.Object);
+                _mockDepositInBankAccountCommandHandler.Object,
+                _mockWithdrawFromBankAccountCommandHandler.Object);
         }
+
 
         [Fact]
         public async Task CreateBankAccount_WhenAccountIsCreated_ReturnsOk()
