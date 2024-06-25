@@ -25,6 +25,7 @@ namespace SimpleBankApp.Api.Controllers
             {
                 ErrorType.Conflict => StatusCodes.Status409Conflict,
                 ErrorType.Validation => StatusCodes.Status400BadRequest,
+                ErrorType.Forbidden => StatusCodes.Status403Forbidden,
                 ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
                 ErrorType.NotFound => StatusCodes.Status404NotFound,
                 _ => StatusCodes.Status500InternalServerError,
