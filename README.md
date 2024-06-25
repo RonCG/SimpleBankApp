@@ -7,12 +7,12 @@ Make sure to clone the repo to your local computer and to have docker installed.
 
 1. Run the docker-compose file:
 ```
-docker-compose up
+docker-compose up --build
 ```
 *This command will build and run the api container at the port 5000 and the db container at the port 1400 by default. If you need to change this, please modify the ports sections of the corresponding container in the docker-compose file.
 
 ---
-2. Copy the db initialization script to the database container:
+2. Make sure the containers are running. Copy the db initialization script to the database container:
 ```
 docker cp Database/init-db.sql simplebankapp-db:/init-db.sql
 ```
