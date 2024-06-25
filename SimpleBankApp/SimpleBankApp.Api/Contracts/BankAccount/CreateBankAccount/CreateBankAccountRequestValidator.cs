@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace SimpleBankApp.Api.Contracts.BankAccount.Requests
+namespace SimpleBankApp.Api.Contracts.BankAccount.CreateBankAccount
 {
     public class CreateBankAccountRequestValidator : AbstractValidator<CreateBankAccountRequest>
     {

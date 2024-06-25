@@ -2,7 +2,6 @@ using FluentAssertions;
 using MapsterMapper;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using SimpleBankApp.Api.Contracts.BankAccount.Requests;
 using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
 using SimpleBankApp.Application.Common.Interfaces.Persistance;
 using SimpleBankApp.Domain.Entities;
