@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleBankApp.Infrastructure.Persistance.Repositories
+namespace SimpleBankApp.Infrastructure.Persistance.Repositories.Common
 {
     public class BaseRepository
     {
@@ -35,7 +35,7 @@ namespace SimpleBankApp.Infrastructure.Persistance.Repositories
             return model;
         }
 
-        
+
         protected T SetUpdateVars<T>(T model)
         {
             ((dynamic)model).LastUpdatedOn = DateTime.Now.ToUniversalTime();
