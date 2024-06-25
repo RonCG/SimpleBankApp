@@ -11,6 +11,7 @@ using SimpleBankApp.Infrastructure.Authentication;
 using SimpleBankApp.Infrastructure.Common.Mappings;
 using SimpleBankApp.Infrastructure.Persistance;
 using SimpleBankApp.Infrastructure.Persistance.Repositories;
+using SimpleBankApp.Infrastructure.Persistance.Repositories.Common;
 using System.Text;
 
 namespace SimpleBankApp.Infrastructure.Common
@@ -43,7 +44,9 @@ namespace SimpleBankApp.Infrastructure.Common
                 });
             services.AddSingleton<IJWTTokenGenerator, JWTTokenGenerator>();
 
+            services.AddScoped<ICommonRepository, CommonRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IBankAccountRepository, BankAccountRepository>();
 
             return services;
         }
