@@ -68,7 +68,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
 
             _mockMapper
                 .Setup(mapper => mapper.Map<CreateBankAccountResponse>(It.IsAny<CreateBankAccountCommandResponse>()))
-                .Returns(new CreateBankAccountResponse { Id = accountId, UserId = userId, Balance = 1000 });
+                .Returns(new CreateBankAccountResponse { AccountId = accountId, UserId = userId, Balance = 1000 });
 
             // Act
             var result = await _controller.CreateBankAccount(request);
@@ -76,7 +76,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnValue = Assert.IsType<CreateBankAccountResponse>(okResult.Value);
-            returnValue.Id.Should().Be(accountId);
+            returnValue.AccountId.Should().Be(accountId);
             returnValue.UserId.Should().Be(userId);
             returnValue.Balance.Should().Be(1000);
 
