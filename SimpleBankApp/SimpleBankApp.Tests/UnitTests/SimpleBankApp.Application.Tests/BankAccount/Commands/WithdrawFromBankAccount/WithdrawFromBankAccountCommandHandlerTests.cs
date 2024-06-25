@@ -1,12 +1,9 @@
 using FluentAssertions;
 using MapsterMapper;
-using Microsoft.AspNetCore.Http;
 using Moq;
-using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
 using SimpleBankApp.Application.Common.Interfaces.Persistance;
 using SimpleBankApp.Domain.Entities;
 using SimpleBankApp.Domain.Common.Errors;
-using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
 
 namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAccount.Commands.DepositInBankAccount
@@ -72,7 +69,8 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAcco
             var userId = Guid.NewGuid();
             var accountId = Guid.NewGuid();
             var amountToWithdraw = 1000;
-            var bankAccount = new BankAccountEntity { Id = accountId };
+            var currentBalance = amountToWithdraw * 2;
+            var bankAccount = new BankAccountEntity { Id = accountId, Balance = currentBalance };
             var command = new WithdrawFromBankAccountCommand { UserId = userId, AccountId = accountId, AmountToWithdraw = amountToWithdraw };
             var error =  Errors.BankAccount.BankAccountNotUpdated;
 
@@ -132,7 +130,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAcco
             var currentBalance = amountToWithdraw/2;
             var bankAccount = new BankAccountEntity { Id = accountId, Balance = currentBalance };
             var command = new WithdrawFromBankAccountCommand { UserId = userId, AccountId = accountId, AmountToWithdraw = amountToWithdraw };
-            var error = Errors.BankAccount.BankAccountInsufficientFunds;
+            var error = Errors.BankAccount.InsufficientFundsForWithdraw;
 
             _mockBankAccountRepository
                .Setup(repo => repo.GetBankAccount(It.IsAny<Guid>(), It.IsAny<Guid>()))
