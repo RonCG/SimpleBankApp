@@ -1,3 +1,4 @@
+using ErrorOr;
 using FluentAssertions;
 using LinqToDB;
 using LinqToDB.Data;
@@ -86,6 +87,31 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Infrastructure.Tests.Persi
 
             // Assert
             result.Should().BeEquivalentTo(bankAccountEntity);
+        }
+
+        [Fact]
+        public async Task BankAccountRepository_WhenBankAccountIsDeleted_ReturnsTrue()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var accountId = Guid.NewGuid();
+
+            var bankAccountEntity = new BankAccountEntity { Id = accountId, UserId = userId };
+            var bankAccount = new BankAccount { Id = accountId, UserId = userId };
+            
+            _mockMapper
+                .Setup(mapper => mapper.Map<BankAccount>(bankAccountEntity))
+                .Returns(bankAccount);
+
+            _mockDb
+                .Setup(db => db.DeleteAsync(bankAccount))
+                .ReturnsAsync(1);
+
+            // Act
+            var result = await _repository.DeleteAsync(bankAccountEntity);
+
+            // Assert
+            result.Should().BeTrue();
         }
     }
 }

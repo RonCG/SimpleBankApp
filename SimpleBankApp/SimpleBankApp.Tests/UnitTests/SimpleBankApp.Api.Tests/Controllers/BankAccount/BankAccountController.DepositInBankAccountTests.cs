@@ -8,6 +8,7 @@ using SimpleBankApp.Api.Contracts.BankAccount.DepositInBankAccount;
 using SimpleBankApp.Api.Controllers;
 using SimpleBankApp.Application.Authentication.Services;
 using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
+using SimpleBankApp.Application.BankAccount.Commands.DeleteBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
 using SimpleBankApp.Domain.Common.Errors;
@@ -24,12 +25,14 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
         private readonly Mock<ICreateBankAccountCommandHandler> _mockCreateBankAccountCommandHandler;
         private readonly Mock<IDepositInBankAccountCommandHandler> _mockDepositInBankAccountCommandHandler;
         private readonly Mock<IWithdrawFromBankAccountCommandHandler> _mockWithdrawFromBankAccountCommandHandler;
+        private readonly Mock<IDeleteBankAccountCommandHandler> _mockDeleteBankAccountCommandHandler;
 
         public BankAccountControllerDepositInTests()
         {
             _mockCreateBankAccountCommandHandler = new Mock<ICreateBankAccountCommandHandler>();
             _mockDepositInBankAccountCommandHandler = new Mock<IDepositInBankAccountCommandHandler>();
             _mockWithdrawFromBankAccountCommandHandler = new Mock<IWithdrawFromBankAccountCommandHandler>();
+            _mockDeleteBankAccountCommandHandler = new Mock<IDeleteBankAccountCommandHandler>();
             _mockMapper = new Mock<IMapper>();
             _mockHttpContextService = new Mock<IHttpContextService>();
 
@@ -40,7 +43,8 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
                 new Mock<IAuthenticationService>().Object,
                 _mockCreateBankAccountCommandHandler.Object,
                 _mockDepositInBankAccountCommandHandler.Object,
-                _mockWithdrawFromBankAccountCommandHandler.Object);
+                _mockWithdrawFromBankAccountCommandHandler.Object,
+                _mockDeleteBankAccountCommandHandler.Object);
         }
 
 
