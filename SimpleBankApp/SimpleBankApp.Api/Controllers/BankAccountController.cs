@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using SimpleBankApp.Api.Common.Http;
 using SimpleBankApp.Api.Contracts.BankAccount.CreateBankAccount;
 using SimpleBankApp.Api.Contracts.BankAccount.DepositInBankAccount;
+using SimpleBankApp.Api.Contracts.BankAccount.WithdrawFromBankAccount;
 using SimpleBankApp.Application.Authentication.Services;
 using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
+using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
 
 namespace SimpleBankApp.Api.Controllers
 {
@@ -22,6 +24,7 @@ namespace SimpleBankApp.Api.Controllers
         private readonly IAuthenticationService _authenticationService;
         private readonly ICreateBankAccountCommandHandler _createBankAccountCommandHandler;
         private readonly IDepositInBankAccountCommandHandler _depositInBankAccountCommandHandler;
+        private readonly IWithdrawFromBankAccountCommandHandler _withdrawFromBankAccountCommandHandler;
 
         public BankAccountController(
             ILogger<BankAccountController> logger,
@@ -29,7 +32,8 @@ namespace SimpleBankApp.Api.Controllers
             IHttpContextService httpContextService,
             IAuthenticationService authenticationService,
             ICreateBankAccountCommandHandler createBankAccountCommandHandler,
-            IDepositInBankAccountCommandHandler depositInBankAccountCommandHandler)
+            IDepositInBankAccountCommandHandler depositInBankAccountCommandHandler,
+            IWithdrawFromBankAccountCommandHandler withdrawFromBankAccountCommandHandler)
         {
             _logger = logger;
             _mapper = mapper;
@@ -37,6 +41,7 @@ namespace SimpleBankApp.Api.Controllers
             _authenticationService = authenticationService;
             _createBankAccountCommandHandler = createBankAccountCommandHandler;
             _depositInBankAccountCommandHandler = depositInBankAccountCommandHandler;
+            _withdrawFromBankAccountCommandHandler = withdrawFromBankAccountCommandHandler;
         }
 
         [HttpPost]
@@ -67,6 +72,22 @@ namespace SimpleBankApp.Api.Controllers
             var result = await _depositInBankAccountCommandHandler.Handle(depositInBankAccountCommand);
             return result.Match(
                 depositInBankAccountCommandResponse => Ok(_mapper.Map<DepositInBankAccountResponse>(depositInBankAccountCommandResponse)),
+                errors => Problem(errors));
+        }
+
+        [HttpPost("withdraw")]
+        public async Task<IActionResult> WithdrawFromBankAccount([FromBody] WithdrawFromBankAccountRequest request)
+        {
+            var withdrawFromBankAccountCommand = new WithdrawFromBankAccountCommand
+            {
+                UserId = _httpContextService.GetUserId(),
+                AccountId = request.AccountId,
+                AmountToWithdraw = request.AmountToWithdraw
+            };
+
+            var result = await _withdrawFromBankAccountCommandHandler.Handle(withdrawFromBankAccountCommand);
+            return result.Match(
+                withdrawFromBankAccountCommandResponse => Ok(_mapper.Map<WithdrawFromBankAccountResponse>(withdrawFromBankAccountCommandResponse)),
                 errors => Problem(errors));
         }
 
