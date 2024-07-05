@@ -56,6 +56,51 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Infrastructure.Tests.Persi
             result.Should().BeEquivalentTo(bankAccountEntity);
         }
 
+        [Fact]
+        public async Task GetBankAccount_WhenBankAccountExists_ReturnsBankAccountEntity()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var accountId = Guid.NewGuid();
+            var bankAccountEntity = new BankAccountEntity { Id = accountId, UserId = userId, Balance = 1000 };
+            var bankAccount = new BankAccount { Id = accountId, UserId = userId, Balance = 1000 };
+
+            _mockDb
+                .Setup(db => db.GetByPredicate<BankAccount>(It.IsAny<Func<BankAccount, bool>>()))
+                .Returns(bankAccount);
+
+            _mockMapper
+                .Setup(mapper => mapper.Map<BankAccountEntity>(It.IsAny<BankAccount>()))
+                .Returns(bankAccountEntity);
+
+            // Act
+            var result = await _repository.GetBankAccount(accountId, userId);
+
+            // Assert
+            result.Should().BeEquivalentTo(bankAccountEntity);
+        }
+
+
+        [Fact]
+        public async Task GetBankAccount_WhenBankAccountDoesNotExists_ReturnsNull()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var accountId = Guid.NewGuid();
+            var bankAccountEntity = new BankAccountEntity { Id = accountId, UserId = userId, Balance = 1000 };
+            var bankAccount = new BankAccount { Id = accountId, UserId = userId, Balance = 1000 };
+
+            _mockDb
+                .Setup(db => db.GetByPredicate<BankAccount>(It.IsAny<Func<BankAccount, bool>>()))
+                .Returns((BankAccount)null);
+
+            // Act
+            var result = await _repository.GetBankAccount(accountId, userId);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
 
         [Fact]
         public async Task BankAccountRepository_WhenBankAccountIsUpdated_ReturnsUpdatedBankAccountEntity()

@@ -64,7 +64,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
             var balance = 100;
             var lastUpdatedOn = DateTime.UtcNow;
             var request = new GetBankAccountRequest { AccountId = accountId };
-            var commandResponse = new GetBankAccountCommandResponse { Id = accountId, Balance = balance, LastUpdatedOn = lastUpdatedOn };
+            var commandResponse = new GetBankAccountCommandResponse { AccountId = accountId, Balance = balance, LastUpdatedOn = lastUpdatedOn };
 
             _mockHttpContextService
                 .Setup(service => service.GetUserId())
@@ -76,7 +76,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
 
             _mockMapper
                 .Setup(mapper => mapper.Map<GetBankAccountResponse>(commandResponse))
-                .Returns(new GetBankAccountResponse { AccountId = commandResponse.Id, Balance = commandResponse.Balance, LastUpdatedOn = commandResponse.LastUpdatedOn });
+                .Returns(new GetBankAccountResponse { AccountId = commandResponse.AccountId, Balance = commandResponse.Balance, LastUpdatedOn = commandResponse.LastUpdatedOn });
 
             // Act
             var result = await _controller.GetBankAccount(request);

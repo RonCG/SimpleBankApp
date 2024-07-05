@@ -2,7 +2,7 @@
 {
     public class GetBankAccountCommandResponse
     {
-        public Guid Id { get; set; }
+        public Guid AccountId { get; set; }
         public decimal Balance { get; set; } = 0;
         public DateTime LastUpdatedOn { get; set; }
     }
