@@ -68,14 +68,13 @@ namespace SimpleBankApp.Api.Controllers
         }
 
 
-
-        [HttpGet]
-        public async Task<IActionResult> GetBankAccount([FromBody] GetBankAccountRequest request)
+        [HttpGet("{accountId}")]
+        public async Task<IActionResult> GetBankAccount([FromRoute] Guid accountId)
         {
             var getBankAccountCommand = new GetBankAccountCommand
             {
                 UserId = _httpContextService.GetUserId(),
-                AccountId = request.AccountId
+                AccountId = accountId
             };
 
             var result = await _getBankAccountCommandHandler.Handle(getBankAccountCommand);
