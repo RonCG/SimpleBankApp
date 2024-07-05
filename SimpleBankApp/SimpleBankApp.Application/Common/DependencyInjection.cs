@@ -5,6 +5,7 @@ using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.DeleteBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
+using SimpleBankApp.Application.BankAccount.Queries.GetBankAccount;
 using SimpleBankApp.Application.Common.Mappings;
 using SimpleBankApp.Domain.Entities;
 
@@ -18,6 +19,7 @@ namespace SimpleBankApp.Application.Common
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddScoped<ICreateBankAccountCommandHandler, CreateBankAccountCommandHandler>();
+            services.AddScoped<IGetBankAccountCommandHandler, GetBankAccountCommandHandler>();
             services.AddScoped<IDepositInBankAccountCommandHandler, DepositInBankAccountCommandHandler>();
             services.AddScoped<IWithdrawFromBankAccountCommandHandler, WithdrawFromBankAccountCommandHandler>();
             services.AddScoped<IDeleteBankAccountCommandHandler, DeleteBankAccountCommandHandler>();

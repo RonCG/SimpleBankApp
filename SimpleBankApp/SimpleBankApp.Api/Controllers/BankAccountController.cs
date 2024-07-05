@@ -6,12 +6,14 @@ using SimpleBankApp.Api.Common.Http;
 using SimpleBankApp.Api.Contracts.BankAccount.CreateBankAccount;
 using SimpleBankApp.Api.Contracts.BankAccount.DeleteBankAccount;
 using SimpleBankApp.Api.Contracts.BankAccount.DepositInBankAccount;
+using SimpleBankApp.Api.Contracts.BankAccount.GetBankAccount;
 using SimpleBankApp.Api.Contracts.BankAccount.WithdrawFromBankAccount;
 using SimpleBankApp.Application.Authentication.Services;
 using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.DeleteBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
+using SimpleBankApp.Application.BankAccount.Queries.GetBankAccount;
 
 namespace SimpleBankApp.Api.Controllers
 {
@@ -23,6 +25,7 @@ namespace SimpleBankApp.Api.Controllers
         private readonly IHttpContextService _httpContextService;
         private readonly IAuthenticationService _authenticationService;
         private readonly ICreateBankAccountCommandHandler _createBankAccountCommandHandler;
+        private readonly IGetBankAccountCommandHandler _getBankAccountCommandHandler;
         private readonly IDepositInBankAccountCommandHandler _depositInBankAccountCommandHandler;
         private readonly IWithdrawFromBankAccountCommandHandler _withdrawFromBankAccountCommandHandler;
         private readonly IDeleteBankAccountCommandHandler _deleteBankAccountCommandHandler;
@@ -33,6 +36,7 @@ namespace SimpleBankApp.Api.Controllers
             IHttpContextService httpContextService,
             IAuthenticationService authenticationService,
             ICreateBankAccountCommandHandler createBankAccountCommandHandler,
+            IGetBankAccountCommandHandler getBankAccountCommandHandler,
             IDepositInBankAccountCommandHandler depositInBankAccountCommandHandler,
             IWithdrawFromBankAccountCommandHandler withdrawFromBankAccountCommandHandler,
             IDeleteBankAccountCommandHandler deleteBankAccountCommandHandler)
@@ -45,6 +49,7 @@ namespace SimpleBankApp.Api.Controllers
             _depositInBankAccountCommandHandler = depositInBankAccountCommandHandler;
             _withdrawFromBankAccountCommandHandler = withdrawFromBankAccountCommandHandler;
             _deleteBankAccountCommandHandler = deleteBankAccountCommandHandler;
+            _getBankAccountCommandHandler = getBankAccountCommandHandler;
         }
 
         [HttpPost]
@@ -59,6 +64,23 @@ namespace SimpleBankApp.Api.Controllers
             var result = await _createBankAccountCommandHandler.Handle(createBankAccountCommand);
             return result.Match(
                 createBankAccountCommandResponse => Ok(_mapper.Map<CreateBankAccountResponse>(createBankAccountCommandResponse)),
+                errors => Problem(errors));
+        }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetBankAccount([FromBody] GetBankAccountRequest request)
+        {
+            var getBankAccountCommand = new GetBankAccountCommand
+            {
+                UserId = _httpContextService.GetUserId(),
+                AccountId = request.AccountId
+            };
+
+            var result = await _getBankAccountCommandHandler.Handle(getBankAccountCommand);
+            return result.Match(
+                getBankAccountCommandResponse => Ok(_mapper.Map<GetBankAccountResponse>(getBankAccountCommandResponse)),
                 errors => Problem(errors));
         }
 

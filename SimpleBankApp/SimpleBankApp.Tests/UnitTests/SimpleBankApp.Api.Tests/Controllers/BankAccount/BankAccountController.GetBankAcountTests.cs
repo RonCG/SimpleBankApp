@@ -1,10 +1,12 @@
-﻿using FluentAssertions;
+﻿using ErrorOr;
+using FluentAssertions;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using SimpleBankApp.Api.Common.Http;
-using SimpleBankApp.Api.Contracts.BankAccount.DepositInBankAccount;
+using SimpleBankApp.Api.Contracts.BankAccount.CreateBankAccount;
+using SimpleBankApp.Api.Contracts.BankAccount.GetBankAccount;
 using SimpleBankApp.Api.Controllers;
 using SimpleBankApp.Application.Authentication.Services;
 using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
@@ -13,11 +15,12 @@ using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
 using SimpleBankApp.Application.BankAccount.Queries.GetBankAccount;
 using SimpleBankApp.Domain.Common.Errors;
+using System.Net;
 
 
 namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.BankAccount
 {
-    public class BankAccountControllerDepositInTests
+    public class BankAccountControllerGetBankAccountTests
     {
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<IHttpContextService> _mockHttpContextService;
@@ -29,7 +32,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
         private readonly Mock<IWithdrawFromBankAccountCommandHandler> _mockWithdrawFromBankAccountCommandHandler;
         private readonly Mock<IDeleteBankAccountCommandHandler> _mockDeleteBankAccountCommandHandler;
 
-        public BankAccountControllerDepositInTests()
+        public BankAccountControllerGetBankAccountTests()
         {
             _mockCreateBankAccountCommandHandler = new Mock<ICreateBankAccountCommandHandler>();
             _mockGetBankAccountCommandHandler = new Mock<IGetBankAccountCommandHandler>();
@@ -53,72 +56,70 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
 
 
         [Fact]
-        public async Task DepositInBankAccount_WhenDataIsValid_ReturnsOk()
+        public async Task GetBankAccount_WhenAccountIsFound_ReturnsOk()
         {
             // Arrange
             var userId = Guid.NewGuid();
             var accountId = Guid.NewGuid();
-            var amountToDeposit = 1000;
-            var currentBalance = 500;
-            var finalBalance = amountToDeposit + currentBalance;
-            var lastUpdatedOn = DateTime.Now;
-            var request = new DepositInBankAccountRequest { AccountId = accountId, AmountToDeposit = amountToDeposit };
-            var commandResponse = new DepositInBankAccountCommandResponse { AccountId = accountId, Balance = finalBalance, LastUpdatedOn = lastUpdatedOn };
+            var balance = 100;
+            var lastUpdatedOn = DateTime.UtcNow;
+            var request = new GetBankAccountRequest { AccountId = accountId };
+            var commandResponse = new GetBankAccountCommandResponse { Id = accountId, Balance = balance, LastUpdatedOn = lastUpdatedOn };
 
             _mockHttpContextService
                 .Setup(service => service.GetUserId())
                 .Returns(userId);
 
-            _mockDepositInBankAccountCommandHandler
-                .Setup(handler => handler.Handle(It.IsAny<DepositInBankAccountCommand>()))
+            _mockGetBankAccountCommandHandler
+                .Setup(handler => handler.Handle(It.IsAny<GetBankAccountCommand>()))
                 .ReturnsAsync(commandResponse);
 
             _mockMapper
-                .Setup(mapper => mapper.Map<DepositInBankAccountResponse>(It.IsAny<DepositInBankAccountCommandResponse>()))
-                .Returns(new DepositInBankAccountResponse { AccountId = accountId, Balance = amountToDeposit + currentBalance, LastUpdatedOn = lastUpdatedOn });
+                .Setup(mapper => mapper.Map<GetBankAccountResponse>(commandResponse))
+                .Returns(new GetBankAccountResponse { AccountId = commandResponse.Id, Balance = commandResponse.Balance, LastUpdatedOn = commandResponse.LastUpdatedOn });
 
             // Act
-            var result = await _controller.DepositInBankAccount(request);
+            var result = await _controller.GetBankAccount(request);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnValue = Assert.IsType<DepositInBankAccountResponse>(okResult.Value);
+            var returnValue = Assert.IsType<GetBankAccountResponse>(okResult.Value);
             returnValue.AccountId.Should().Be(accountId);
+            returnValue.Balance.Should().Be(balance);
             returnValue.LastUpdatedOn.Should().Be(lastUpdatedOn);
-            returnValue.Balance.Should().Be(finalBalance);
 
         }
 
         [Fact]
-        public async Task DepositInBankAccount_WhenDataIsNotValid_ReturnsObjectResult()
+        public async Task GetBankAccount_WhenAccountIsNotFound_ReturnsObjectResult()
         {
             // Arrange
             var userId = Guid.NewGuid();
             var accountId = Guid.NewGuid();
-            var amountToDeposit = 1000;
-
-            var request = new DepositInBankAccountRequest { AccountId = accountId, AmountToDeposit = amountToDeposit };
-            
-            ErrorOr.Error commandResponse = Errors.BankAccount.BankAccountNotUpdated;
+            var lastUpdatedOn = DateTime.UtcNow;
+            var request = new GetBankAccountRequest { AccountId = accountId };
+            ErrorOr.Error commandResponse = Errors.BankAccount.BankAccountNotFound;
 
             _mockHttpContextService
                 .Setup(service => service.GetUserId())
                 .Returns(userId);
 
-            _mockDepositInBankAccountCommandHandler
-                .Setup(handler => handler.Handle(It.IsAny<DepositInBankAccountCommand>()))
+            _mockGetBankAccountCommandHandler
+                .Setup(handler => handler.Handle(It.IsAny<GetBankAccountCommand>()))
                 .ReturnsAsync(commandResponse);
 
             _mockMapper
-                .Setup(mapper => mapper.Map<DepositInBankAccountResponse>(It.IsAny<DepositInBankAccountCommandResponse>()))
-                .Returns(It.IsAny<DepositInBankAccountResponse>());
+                .Setup(mapper => mapper.Map<GetBankAccountResponse>(It.IsAny<GetBankAccountCommandResponse>()))
+                .Returns(new GetBankAccountResponse());
 
             // Act
-            var result = await _controller.DepositInBankAccount(request);
-
+            var result = await _controller.GetBankAccount(request);
+            
             // Assert
             var errorResult = Assert.IsType<ObjectResult>(result);
+            errorResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
 
         }
+
     }
 }

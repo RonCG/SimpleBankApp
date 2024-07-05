@@ -11,6 +11,7 @@ using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.DeleteBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
+using SimpleBankApp.Application.BankAccount.Queries.GetBankAccount;
 using SimpleBankApp.Domain.Common.Errors;
 
 
@@ -23,6 +24,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
         private readonly BankAccountController _controller;
 
         private readonly Mock<ICreateBankAccountCommandHandler> _mockCreateBankAccountCommandHandler;
+        private readonly Mock<IGetBankAccountCommandHandler> _mockGetBankAccountCommandHandler;
         private readonly Mock<IDepositInBankAccountCommandHandler> _mockDepositInBankAccountCommandHandler;
         private readonly Mock<IWithdrawFromBankAccountCommandHandler> _mockWithdrawFromBankAccountCommandHandler;
         private readonly Mock<IDeleteBankAccountCommandHandler> _mockDeleteBankAccountCommandHandler;
@@ -30,6 +32,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
         public BankAccountControllerCreateBankAccountTests()
         {
             _mockCreateBankAccountCommandHandler = new Mock<ICreateBankAccountCommandHandler>();
+            _mockGetBankAccountCommandHandler = new Mock<IGetBankAccountCommandHandler>();
             _mockDepositInBankAccountCommandHandler = new Mock<IDepositInBankAccountCommandHandler>();
             _mockWithdrawFromBankAccountCommandHandler = new Mock<IWithdrawFromBankAccountCommandHandler>();
             _mockDeleteBankAccountCommandHandler = new Mock<IDeleteBankAccountCommandHandler>();
@@ -42,6 +45,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
                 _mockHttpContextService.Object,
                 new Mock<IAuthenticationService>().Object,
                 _mockCreateBankAccountCommandHandler.Object,
+                _mockGetBankAccountCommandHandler.Object,
                 _mockDepositInBankAccountCommandHandler.Object,
                 _mockWithdrawFromBankAccountCommandHandler.Object,
                 _mockDeleteBankAccountCommandHandler.Object);
