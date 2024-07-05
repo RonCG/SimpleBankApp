@@ -13,6 +13,7 @@ using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
 using SimpleBankApp.Application.BankAccount.Queries.GetBankAccount;
 using SimpleBankApp.Domain.Common.Errors;
+using System.Net;
 
 
 namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.BankAccount
@@ -84,7 +85,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
         }
 
         [Fact]
-        public async Task DeleteBankAccount_WhenDataIsNotValid_ReturnsObjectResult()
+        public async Task DeleteBankAccount_WhenDataIsNotValid_Returns500StatusCode()
         {
             // Arrange
             var userId = Guid.NewGuid();
@@ -111,7 +112,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
 
             // Assert
             var errorResult = Assert.IsType<ObjectResult>(result);
-
+            errorResult.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
         }
     }
 }

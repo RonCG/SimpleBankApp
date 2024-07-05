@@ -91,7 +91,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
         }
 
         [Fact]
-        public async Task GetBankAccount_WhenAccountIsNotFound_ReturnsObjectResult()
+        public async Task GetBankAccount_WhenAccountIsNotFound_Returns404StatusCode()
         {
             // Arrange
             var userId = Guid.NewGuid();
