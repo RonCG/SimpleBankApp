@@ -63,7 +63,6 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
             var accountId = Guid.NewGuid();
             var balance = 100;
             var lastUpdatedOn = DateTime.UtcNow;
-            var request = new GetBankAccountRequest { AccountId = accountId };
             var commandResponse = new GetBankAccountCommandResponse { AccountId = accountId, Balance = balance, LastUpdatedOn = lastUpdatedOn };
 
             _mockHttpContextService
@@ -79,7 +78,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
                 .Returns(new GetBankAccountResponse { AccountId = commandResponse.AccountId, Balance = commandResponse.Balance, LastUpdatedOn = commandResponse.LastUpdatedOn });
 
             // Act
-            var result = await _controller.GetBankAccount(request);
+            var result = await _controller.GetBankAccount(accountId);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -97,7 +96,6 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
             var userId = Guid.NewGuid();
             var accountId = Guid.NewGuid();
             var lastUpdatedOn = DateTime.UtcNow;
-            var request = new GetBankAccountRequest { AccountId = accountId };
             ErrorOr.Error commandResponse = Errors.BankAccount.BankAccountNotFound;
 
             _mockHttpContextService
@@ -113,7 +111,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
                 .Returns(new GetBankAccountResponse());
 
             // Act
-            var result = await _controller.GetBankAccount(request);
+            var result = await _controller.GetBankAccount(accountId);
             
             // Assert
             var errorResult = Assert.IsType<ObjectResult>(result);
