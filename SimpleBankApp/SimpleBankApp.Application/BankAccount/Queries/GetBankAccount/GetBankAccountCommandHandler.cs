@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using MapsterMapper;
+using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
 using SimpleBankApp.Application.Common.Interfaces.Persistance;
 using SimpleBankApp.Domain.Common.Errors;
 using SimpleBankApp.Domain.Entities;
@@ -21,7 +22,13 @@ namespace SimpleBankApp.Application.BankAccount.Queries.GetBankAccount
 
         public async Task<ErrorOr<GetBankAccountCommandResponse>> Handle(GetBankAccountCommand command)
         {
-            return new GetBankAccountCommandResponse();
+            var bankAccount = await _bankAccountRepository.GetBankAccount(command.AccountId, command.UserId);
+            if (bankAccount == null)
+            {
+                return Errors.BankAccount.BankAccountNotFound;
+            }
+
+            return _mapper.Map<GetBankAccountCommandResponse>(bankAccount);
         }
     }
 
