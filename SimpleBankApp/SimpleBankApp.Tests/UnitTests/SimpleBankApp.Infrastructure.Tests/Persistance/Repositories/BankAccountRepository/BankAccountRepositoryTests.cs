@@ -1,14 +1,8 @@
 using ErrorOr;
 using FluentAssertions;
-using LinqToDB;
-using LinqToDB.Data;
-using LinqToDB.Mapping;
-using LinqToDB.SqlProvider;
 using MapsterMapper;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using SimpleBankApp.Domain.Entities;
-using SimpleBankApp.Infrastructure.Persistance;
 using SimpleBankApp.Infrastructure.Persistance.Linq2DB;
 using SimpleBankApp.Infrastructure.Persistance.Repositories;
 using SimpleBankApp.Infrastructure.Persistance.Repositories.Common;
@@ -29,7 +23,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Infrastructure.Tests.Persi
         }
 
         [Fact]
-        public async Task BankAccountRepository_WhenBankAccountIsCreated_ReturnsCreatedBankAccountEntity()
+        public async Task CreateBankAccount_WhenBankAccountIsCreated_ReturnsCreatedBankAccountEntity()
         {
             // Arrange
             var userId = Guid.NewGuid();
@@ -103,7 +97,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Infrastructure.Tests.Persi
 
 
         [Fact]
-        public async Task BankAccountRepository_WhenBankAccountIsUpdated_ReturnsUpdatedBankAccountEntity()
+        public async Task UpdateBankAccount_WhenBankAccountIsUpdated_ReturnsUpdatedBankAccountEntity()
         {
             // Arrange
             var userId = Guid.NewGuid();
@@ -135,7 +129,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Infrastructure.Tests.Persi
         }
 
         [Fact]
-        public async Task BankAccountRepository_WhenBankAccountIsDeleted_ReturnsTrue()
+        public async Task DeleteBankAccount_WhenBankAccountIsDeleted_ReturnsTrue()
         {
             // Arrange
             var userId = Guid.NewGuid();
