@@ -9,7 +9,13 @@ namespace SimpleBankApp.Infrastructure.Persistance.Repositories.Common
         {
             return base.Db;
         }
-        
+
+        public T? GetByPredicate<T>(Func<T, bool> predicate) where T : class
+        {
+            return Db.GetTable<T>().Where(predicate).FirstOrDefault();
+        }
+
+
         public async Task<int> InsertAsync<T>(T model, bool skipCreateVars = false)
         {
             SetCreateVars(model);
@@ -33,6 +39,7 @@ namespace SimpleBankApp.Infrastructure.Persistance.Repositories.Common
     public interface ICommonRepository
     {
         public SimpleBankDb GetSimpleBankDb();
+        public T? GetByPredicate<T>(Func<T, bool> predicate) where T : class;
         public Task<int> InsertAsync<T>(T model, bool skipCreateVars = false);
         public Task<int> UpdateAsync<T>(T model, bool skipUpdateVars = false);
         public Task<int> DeleteAsync<T>(T model);

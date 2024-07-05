@@ -36,11 +36,14 @@ namespace SimpleBankApp.Infrastructure.Persistance.Repositories
 
         public async Task<BankAccountEntity?> GetBankAccount(Guid accountId, Guid userId)
         {
-            var bankAccount = await _commonRepository.GetSimpleBankDb().BankAccounts
-                                    .Where(x => x.Id == accountId && x.UserId == userId)
-                                    .FirstOrDefaultAsync();
+            var bankAccount = _commonRepository.GetByPredicate<BankAccount>(x => x.Id == accountId && x.UserId == userId);
 
-            return _mapper.Map<BankAccountEntity>(bankAccount);
+            if (bankAccount == null) 
+            { 
+                return null;
+            }
+
+            return await Task.FromResult(_mapper.Map<BankAccountEntity>(bankAccount));
         }
 
         public async Task<bool> DeleteAsync(BankAccountEntity bankAccountEntity)
