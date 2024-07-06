@@ -29,8 +29,13 @@ namespace SimpleBankApp.Infrastructure.Persistance.Repositories
 
         public async Task<UserEntity?> GetUserByEmailAsync(string email)
         {
-            var user = await _commonRepository.GetSimpleBankDb().Users.Where(x => x.Email == email).FirstOrDefaultAsync();
-            return _mapper.Map<UserEntity>(user);
+            var user = _commonRepository.GetByPredicate<User>(x => x.Email == email);
+            if (user == null)
+            {
+                return null;
+            }
+
+            return await Task.FromResult(_mapper.Map<UserEntity>(user));
         }
     }
 }
