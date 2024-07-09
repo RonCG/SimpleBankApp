@@ -9,7 +9,6 @@ using SimpleBankApp.Api.Contracts.BankAccount.DepositInBankAccount;
 using SimpleBankApp.Api.Controllers;
 using SimpleBankApp.Application.Authentication.Services;
 using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
-using SimpleBankApp.Application.BankAccount.Queries.GetBankAccount;
 using SimpleBankApp.Domain.Common.Errors;
 using System.Net;
 
@@ -18,27 +17,26 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
 {
     public class BankAccountControllerDepositInTests
     {
-        private readonly Mock<IMapper> _mockMapper;
-        private readonly Mock<IHttpContextService> _mockHttpContextService;
         private readonly BankAccountController _controller;
 
+        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IHttpContextService> _mockHttpContextService;
+        private readonly Mock<IAuthenticationService> _mockAuthenticationService;
         private readonly Mock<IMediator> _mockMediator;
-        private readonly Mock<IGetBankAccountQueryHandler> _mockGetBankAccountCommandHandler;
 
         public BankAccountControllerDepositInTests()
         {
-            _mockMediator = new Mock<IMediator>();
-            _mockGetBankAccountCommandHandler = new Mock<IGetBankAccountQueryHandler>();
             _mockMapper = new Mock<IMapper>();
             _mockHttpContextService = new Mock<IHttpContextService>();
+            _mockAuthenticationService = new Mock<IAuthenticationService>();
+            _mockMediator = new Mock<IMediator>();
 
             _controller = new BankAccountController(
                 new Mock<ILogger<BankAccountController>>().Object,
                 _mockMapper.Object,
                 _mockHttpContextService.Object,
-                new Mock<IAuthenticationService>().Object,
-                _mockMediator.Object,
-                _mockGetBankAccountCommandHandler.Object);
+                _mockAuthenticationService.Object,
+                _mockMediator.Object);
         }
 
 

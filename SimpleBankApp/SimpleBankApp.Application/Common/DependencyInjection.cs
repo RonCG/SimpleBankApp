@@ -17,10 +17,8 @@ namespace SimpleBankApp.Application.Common
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddMappings();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
-
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-            services.AddScoped<IGetBankAccountQueryHandler, GetBankAccountQueryHandler>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             return services;
         } 

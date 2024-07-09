@@ -1,13 +1,13 @@
 ﻿using ErrorOr;
 using MapsterMapper;
-using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
+using MediatR;
 using SimpleBankApp.Application.Common.Interfaces.Persistance;
 using SimpleBankApp.Domain.Common.Errors;
 using SimpleBankApp.Domain.Entities;
 
 namespace SimpleBankApp.Application.BankAccount.Queries.GetBankAccount
 {
-    public class GetBankAccountQueryHandler : IGetBankAccountQueryHandler
+    public class GetBankAccountQueryHandler : IRequestHandler<GetBankAccountQuery, ErrorOr<GetBankAccountQueryResponse>>
     {
         private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ namespace SimpleBankApp.Application.BankAccount.Queries.GetBankAccount
             _mapper = mapper;
         }
 
-        public async Task<ErrorOr<GetBankAccountQueryResponse>> Handle(GetBankAccountQuery command)
+        public async Task<ErrorOr<GetBankAccountQueryResponse>> Handle(GetBankAccountQuery command, CancellationToken cancellationToken)
         {
             var bankAccount = await _bankAccountRepository.GetBankAccount(command.AccountId, command.UserId);
             if (bankAccount == null)
@@ -32,8 +32,4 @@ namespace SimpleBankApp.Application.BankAccount.Queries.GetBankAccount
         }
     }
 
-    public interface IGetBankAccountQueryHandler
-    {
-        Task<ErrorOr<GetBankAccountQueryResponse>> Handle(GetBankAccountQuery command);
-    }
 }

@@ -24,25 +24,22 @@ namespace SimpleBankApp.Api.Controllers
         private readonly ILogger<BankAccountController> _logger;
         private readonly IMapper _mapper;
         private readonly IHttpContextService _httpContextService;
-        private readonly IAuthenticationService _authenticationService;
 
+        private readonly IAuthenticationService _authenticationService;
         private readonly IMediator _mediator;
-        private readonly IGetBankAccountQueryHandler _getBankAccountCommandHandler;
 
         public BankAccountController(
             ILogger<BankAccountController> logger,
             IMapper mapper,
             IHttpContextService httpContextService,
             IAuthenticationService authenticationService,
-            IMediator mediator,
-            IGetBankAccountQueryHandler getBankAccountCommandHandler)
+            IMediator mediator)
         {
             _logger = logger;
             _mapper = mapper;
             _httpContextService = httpContextService;
             _authenticationService = authenticationService;
             _mediator = mediator;
-            _getBankAccountCommandHandler = getBankAccountCommandHandler;
         }
 
         [HttpPost]
@@ -70,7 +67,7 @@ namespace SimpleBankApp.Api.Controllers
                 AccountId = accountId
             };
 
-            var result = await _getBankAccountCommandHandler.Handle(getBankAccountCommand);
+            var result = await _mediator.Send(getBankAccountCommand);
             return result.Match(
                 getBankAccountCommandResponse => Ok(_mapper.Map<GetBankAccountResponse>(getBankAccountCommandResponse)),
                 errors => Problem(errors));

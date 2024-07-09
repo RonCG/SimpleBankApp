@@ -18,27 +18,26 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
 {
     public class BankAccountControllerGetBankAccountTests
     {
-        private readonly Mock<IMapper> _mockMapper;
-        private readonly Mock<IHttpContextService> _mockHttpContextService;
         private readonly BankAccountController _controller;
 
+        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IHttpContextService> _mockHttpContextService;
+        private readonly Mock<IAuthenticationService> _mockAuthenticationService;
         private readonly Mock<IMediator> _mockMediator;
-        private readonly Mock<IGetBankAccountQueryHandler> _mockGetBankAccountCommandHandler;
-        
+
         public BankAccountControllerGetBankAccountTests()
         {
-            _mockMediator = new Mock<IMediator>();
-            _mockGetBankAccountCommandHandler = new Mock<IGetBankAccountQueryHandler>();
             _mockMapper = new Mock<IMapper>();
             _mockHttpContextService = new Mock<IHttpContextService>();
+            _mockAuthenticationService = new Mock<IAuthenticationService>();
+            _mockMediator = new Mock<IMediator>();
 
             _controller = new BankAccountController(
                 new Mock<ILogger<BankAccountController>>().Object,
                 _mockMapper.Object,
                 _mockHttpContextService.Object,
-                new Mock<IAuthenticationService>().Object,
-                _mockMediator.Object,
-                _mockGetBankAccountCommandHandler.Object);
+                _mockAuthenticationService.Object,
+                _mockMediator.Object);
         }
 
 
@@ -56,8 +55,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
                 .Setup(service => service.GetUserId())
                 .Returns(userId);
 
-            _mockGetBankAccountCommandHandler
-                .Setup(handler => handler.Handle(It.IsAny<GetBankAccountQuery>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetBankAccountQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(commandResponse);
 
             _mockMapper
@@ -89,8 +87,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
                 .Setup(service => service.GetUserId())
                 .Returns(userId);
 
-            _mockGetBankAccountCommandHandler
-                .Setup(handler => handler.Handle(It.IsAny<GetBankAccountQuery>()))
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetBankAccountQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(commandResponse);
 
             _mockMapper
