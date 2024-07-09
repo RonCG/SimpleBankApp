@@ -1,13 +1,14 @@
 ﻿using ErrorOr;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleBankApp.Application.Authentication.Services;
-using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.DeleteBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
 using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
 using SimpleBankApp.Application.BankAccount.Queries.GetBankAccount;
 using SimpleBankApp.Application.Common.Mappings;
 using SimpleBankApp.Domain.Entities;
+using System.Reflection;
 
 namespace SimpleBankApp.Application.Common
 {
@@ -18,7 +19,8 @@ namespace SimpleBankApp.Application.Common
             services.AddMappings();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
-            services.AddScoped<ICreateBankAccountCommandHandler, CreateBankAccountCommandHandler>();
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+           // services.AddScoped<ICreateBankAccountCommandHandler, CreateBankAccountCommandHandler>();
             services.AddScoped<IGetBankAccountCommandHandler, GetBankAccountCommandHandler>();
             services.AddScoped<IDepositInBankAccountCommandHandler, DepositInBankAccountCommandHandler>();
             services.AddScoped<IWithdrawFromBankAccountCommandHandler, WithdrawFromBankAccountCommandHandler>();

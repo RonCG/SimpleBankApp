@@ -1,5 +1,7 @@
-﻿using FluentAssertions;
+﻿using ErrorOr;
+using FluentAssertions;
 using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -24,7 +26,8 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
         private readonly Mock<IHttpContextService> _mockHttpContextService;
         private readonly BankAccountController _controller;
 
-        private readonly Mock<ICreateBankAccountCommandHandler> _mockCreateBankAccountCommandHandler;
+        private readonly Mock<IMediator> _mockMediator;
+
         private readonly Mock<IGetBankAccountCommandHandler> _mockGetBankAccountCommandHandler;
         private readonly Mock<IDepositInBankAccountCommandHandler> _mockDepositInBankAccountCommandHandler;
         private readonly Mock<IWithdrawFromBankAccountCommandHandler> _mockWithdrawFromBankAccountCommandHandler;
@@ -32,7 +35,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
 
         public BankAccountControllerCreateBankAccountTests()
         {
-            _mockCreateBankAccountCommandHandler = new Mock<ICreateBankAccountCommandHandler>();
+            _mockMediator = new Mock<IMediator>();
             _mockGetBankAccountCommandHandler = new Mock<IGetBankAccountCommandHandler>();
             _mockDepositInBankAccountCommandHandler = new Mock<IDepositInBankAccountCommandHandler>();
             _mockWithdrawFromBankAccountCommandHandler = new Mock<IWithdrawFromBankAccountCommandHandler>();
@@ -45,7 +48,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
                 _mockMapper.Object,
                 _mockHttpContextService.Object,
                 new Mock<IAuthenticationService>().Object,
-                _mockCreateBankAccountCommandHandler.Object,
+                _mockMediator.Object,
                 _mockGetBankAccountCommandHandler.Object,
                 _mockDepositInBankAccountCommandHandler.Object,
                 _mockWithdrawFromBankAccountCommandHandler.Object,
@@ -59,17 +62,20 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
             // Arrange
             var userId = Guid.NewGuid();
             var accountId = Guid.NewGuid();
-            var request = new CreateBankAccountRequest { Balance = 1000 };
-            var command = new CreateBankAccountCommand { UserId = userId, Balance = 1000 };
-            var commandResponse = new CreateBankAccountCommandResponse { Id = accountId, UserId = userId, Balance = 1000 };
+            var balance = 1000;
+            var request = new CreateBankAccountRequest { Balance = balance };
+            var commandResponse = new CreateBankAccountCommandResponse { Id = accountId, UserId = userId, Balance = balance };
 
             _mockHttpContextService
                 .Setup(service => service.GetUserId())
                 .Returns(userId);
 
-            _mockCreateBankAccountCommandHandler
-                .Setup(handler => handler.Handle(command))
-                .ReturnsAsync(commandResponse);
+            //_mockCreateBankAccountCommandHandler
+            //    .Setup(handler => handler.Handle(command))
+            //    .ReturnsAsync(commandResponse);
+
+            _mockMediator.Setup(m => m.Send(It.IsAny<CreateBankAccountCommand>(), It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(commandResponse);
 
             _mockMapper
                 .Setup(mapper => mapper.Map<CreateBankAccountResponse>(It.IsAny<CreateBankAccountCommandResponse>()))
@@ -83,7 +89,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
             var returnValue = Assert.IsType<CreateBankAccountResponse>(okResult.Value);
             returnValue.AccountId.Should().Be(accountId);
             returnValue.UserId.Should().Be(userId);
-            returnValue.Balance.Should().Be(1000);
+            returnValue.Balance.Should().Be(balance);
 
         }
 
@@ -100,9 +106,12 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
                 .Setup(service => service.GetUserId())
                 .Returns(userId);
 
-            _mockCreateBankAccountCommandHandler
-                .Setup(handler => handler.Handle(It.IsAny<CreateBankAccountCommand>()))
-                .ReturnsAsync(commandResponse);
+            //_mockCreateBankAccountCommandHandler
+            //    .Setup(handler => handler.Handle(It.IsAny<CreateBankAccountCommand>()))
+            //    .ReturnsAsync(commandResponse);
+
+            _mockMediator.Setup(m => m.Send(It.IsAny<CreateBankAccountCommand>(), It.IsAny<CancellationToken>()))
+                 .ReturnsAsync(commandResponse);
 
             _mockMapper
                 .Setup(mapper => mapper.Map<CreateBankAccountResponse>(It.IsAny<CreateBankAccountCommandResponse>()))

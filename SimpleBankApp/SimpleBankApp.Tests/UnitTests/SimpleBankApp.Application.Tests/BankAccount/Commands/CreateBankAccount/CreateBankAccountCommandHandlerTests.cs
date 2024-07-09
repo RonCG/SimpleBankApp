@@ -41,7 +41,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAcco
                 .Returns(bankAccountResponse);
 
             // Act
-            var result = await _handler.Handle(command);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             result.Should().NotBeNull();
@@ -65,7 +65,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAcco
                 .ReturnsAsync((BankAccountEntity)null);
 
             // Act
-            var result = await _handler.Handle(command);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             result.Should().NotBeNull();

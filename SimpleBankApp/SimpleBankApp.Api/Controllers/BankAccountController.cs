@@ -1,5 +1,6 @@
 using ErrorOr;
 using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleBankApp.Api.Common.Http;
@@ -24,7 +25,8 @@ namespace SimpleBankApp.Api.Controllers
         private readonly IMapper _mapper;
         private readonly IHttpContextService _httpContextService;
         private readonly IAuthenticationService _authenticationService;
-        private readonly ICreateBankAccountCommandHandler _createBankAccountCommandHandler;
+
+        private readonly IMediator _mediator;
         private readonly IGetBankAccountCommandHandler _getBankAccountCommandHandler;
         private readonly IDepositInBankAccountCommandHandler _depositInBankAccountCommandHandler;
         private readonly IWithdrawFromBankAccountCommandHandler _withdrawFromBankAccountCommandHandler;
@@ -35,7 +37,7 @@ namespace SimpleBankApp.Api.Controllers
             IMapper mapper,
             IHttpContextService httpContextService,
             IAuthenticationService authenticationService,
-            ICreateBankAccountCommandHandler createBankAccountCommandHandler,
+            IMediator mediator,
             IGetBankAccountCommandHandler getBankAccountCommandHandler,
             IDepositInBankAccountCommandHandler depositInBankAccountCommandHandler,
             IWithdrawFromBankAccountCommandHandler withdrawFromBankAccountCommandHandler,
@@ -45,7 +47,7 @@ namespace SimpleBankApp.Api.Controllers
             _mapper = mapper;
             _httpContextService = httpContextService;
             _authenticationService = authenticationService;
-            _createBankAccountCommandHandler = createBankAccountCommandHandler;
+            _mediator = mediator;
             _depositInBankAccountCommandHandler = depositInBankAccountCommandHandler;
             _withdrawFromBankAccountCommandHandler = withdrawFromBankAccountCommandHandler;
             _deleteBankAccountCommandHandler = deleteBankAccountCommandHandler;
@@ -61,7 +63,7 @@ namespace SimpleBankApp.Api.Controllers
                 Balance = request.Balance
             };
 
-            var result = await _createBankAccountCommandHandler.Handle(createBankAccountCommand);
+            var result = await _mediator.Send(createBankAccountCommand);
             return result.Match(
                 createBankAccountCommandResponse => Ok(_mapper.Map<CreateBankAccountResponse>(createBankAccountCommandResponse)),
                 errors => Problem(errors));
