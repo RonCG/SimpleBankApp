@@ -27,6 +27,15 @@ services:
     networks:
       - simplebankapp-network
 
+  runtracker-seq:
+    container_name: runtracker.seq
+    image: datalust/seq:latest
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 8081:80
+
 networks:
   simplebankapp-network:
     driver: bridge
