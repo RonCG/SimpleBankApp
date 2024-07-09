@@ -25,7 +25,7 @@ app.UseSwaggerUI();
 
 app.UseMiddleware<RequestLogContextMiddleware>();
 app.UseSerilogRequestLogging();
-app.UseExceptionHandler("/error");
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
