@@ -20,11 +20,7 @@ namespace SimpleBankApp.Application.Common
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-           // services.AddScoped<ICreateBankAccountCommandHandler, CreateBankAccountCommandHandler>();
             services.AddScoped<IGetBankAccountCommandHandler, GetBankAccountCommandHandler>();
-            services.AddScoped<IDepositInBankAccountCommandHandler, DepositInBankAccountCommandHandler>();
-            services.AddScoped<IWithdrawFromBankAccountCommandHandler, WithdrawFromBankAccountCommandHandler>();
-            services.AddScoped<IDeleteBankAccountCommandHandler, DeleteBankAccountCommandHandler>();
 
             return services;
         } 

@@ -6,14 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using SimpleBankApp.Api.Common.Http;
-using SimpleBankApp.Api.Contracts.BankAccount.CreateBankAccount;
 using SimpleBankApp.Api.Contracts.BankAccount.GetBankAccount;
 using SimpleBankApp.Api.Controllers;
 using SimpleBankApp.Application.Authentication.Services;
-using SimpleBankApp.Application.BankAccount.Commands.CreateBankAccount;
-using SimpleBankApp.Application.BankAccount.Commands.DeleteBankAccount;
-using SimpleBankApp.Application.BankAccount.Commands.DepositInBankAccount;
-using SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount;
 using SimpleBankApp.Application.BankAccount.Queries.GetBankAccount;
 using SimpleBankApp.Domain.Common.Errors;
 using System.Net;
@@ -29,17 +24,11 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
 
         private readonly Mock<IMediator> _mockMediator;
         private readonly Mock<IGetBankAccountCommandHandler> _mockGetBankAccountCommandHandler;
-        private readonly Mock<IDepositInBankAccountCommandHandler> _mockDepositInBankAccountCommandHandler;
-        private readonly Mock<IWithdrawFromBankAccountCommandHandler> _mockWithdrawFromBankAccountCommandHandler;
-        private readonly Mock<IDeleteBankAccountCommandHandler> _mockDeleteBankAccountCommandHandler;
-
+        
         public BankAccountControllerGetBankAccountTests()
         {
             _mockMediator = new Mock<IMediator>();
             _mockGetBankAccountCommandHandler = new Mock<IGetBankAccountCommandHandler>();
-            _mockDepositInBankAccountCommandHandler = new Mock<IDepositInBankAccountCommandHandler>();
-            _mockWithdrawFromBankAccountCommandHandler = new Mock<IWithdrawFromBankAccountCommandHandler>();
-            _mockDeleteBankAccountCommandHandler = new Mock<IDeleteBankAccountCommandHandler>();
             _mockMapper = new Mock<IMapper>();
             _mockHttpContextService = new Mock<IHttpContextService>();
 
@@ -49,10 +38,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
                 _mockHttpContextService.Object,
                 new Mock<IAuthenticationService>().Object,
                 _mockMediator.Object,
-                _mockGetBankAccountCommandHandler.Object,
-                _mockDepositInBankAccountCommandHandler.Object,
-                _mockWithdrawFromBankAccountCommandHandler.Object,
-                _mockDeleteBankAccountCommandHandler.Object);
+                _mockGetBankAccountCommandHandler.Object);
         }
 
 

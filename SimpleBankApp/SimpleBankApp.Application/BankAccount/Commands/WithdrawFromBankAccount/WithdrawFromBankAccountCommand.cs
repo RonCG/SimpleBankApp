@@ -1,6 +1,9 @@
-﻿namespace SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount
+﻿using ErrorOr;
+using MediatR;
+
+namespace SimpleBankApp.Application.BankAccount.Commands.WithdrawFromBankAccount
 {
-    public class WithdrawFromBankAccountCommand
+    public class WithdrawFromBankAccountCommand : IRequest<ErrorOr<WithdrawFromBankAccountCommandResponse>>
     {
         public Guid UserId { get; set; }
         public Guid AccountId { get; set; }

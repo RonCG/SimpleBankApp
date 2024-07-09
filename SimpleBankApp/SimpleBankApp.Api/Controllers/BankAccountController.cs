@@ -28,9 +28,6 @@ namespace SimpleBankApp.Api.Controllers
 
         private readonly IMediator _mediator;
         private readonly IGetBankAccountCommandHandler _getBankAccountCommandHandler;
-        private readonly IDepositInBankAccountCommandHandler _depositInBankAccountCommandHandler;
-        private readonly IWithdrawFromBankAccountCommandHandler _withdrawFromBankAccountCommandHandler;
-        private readonly IDeleteBankAccountCommandHandler _deleteBankAccountCommandHandler;
 
         public BankAccountController(
             ILogger<BankAccountController> logger,
@@ -38,19 +35,13 @@ namespace SimpleBankApp.Api.Controllers
             IHttpContextService httpContextService,
             IAuthenticationService authenticationService,
             IMediator mediator,
-            IGetBankAccountCommandHandler getBankAccountCommandHandler,
-            IDepositInBankAccountCommandHandler depositInBankAccountCommandHandler,
-            IWithdrawFromBankAccountCommandHandler withdrawFromBankAccountCommandHandler,
-            IDeleteBankAccountCommandHandler deleteBankAccountCommandHandler)
+            IGetBankAccountCommandHandler getBankAccountCommandHandler)
         {
             _logger = logger;
             _mapper = mapper;
             _httpContextService = httpContextService;
             _authenticationService = authenticationService;
             _mediator = mediator;
-            _depositInBankAccountCommandHandler = depositInBankAccountCommandHandler;
-            _withdrawFromBankAccountCommandHandler = withdrawFromBankAccountCommandHandler;
-            _deleteBankAccountCommandHandler = deleteBankAccountCommandHandler;
             _getBankAccountCommandHandler = getBankAccountCommandHandler;
         }
 
@@ -96,7 +87,7 @@ namespace SimpleBankApp.Api.Controllers
                 AmountToDeposit = request.AmountToDeposit
             };
 
-            var result = await _depositInBankAccountCommandHandler.Handle(depositInBankAccountCommand);
+            var result = await _mediator.Send(depositInBankAccountCommand);
             return result.Match(
                 depositInBankAccountCommandResponse => Ok(_mapper.Map<DepositInBankAccountResponse>(depositInBankAccountCommandResponse)),
                 errors => Problem(errors));
@@ -113,7 +104,7 @@ namespace SimpleBankApp.Api.Controllers
                 AmountToWithdraw = request.AmountToWithdraw
             };
 
-            var result = await _withdrawFromBankAccountCommandHandler.Handle(withdrawFromBankAccountCommand);
+            var result = await _mediator.Send(withdrawFromBankAccountCommand);
             return result.Match(
                 withdrawFromBankAccountCommandResponse => Ok(_mapper.Map<WithdrawFromBankAccountResponse>(withdrawFromBankAccountCommandResponse)),
                 errors => Problem(errors));
@@ -129,7 +120,7 @@ namespace SimpleBankApp.Api.Controllers
                 AccountId = request.AccountId
             };
 
-            var result = await _deleteBankAccountCommandHandler.Handle(deleteBankAccountCommand);
+            var result = await _mediator.Send(deleteBankAccountCommand);
             return result.Match(
                 deleteBankAccountCommandResponse => Ok(_mapper.Map<DeleteBankAccountResponse>(deleteBankAccountCommandResponse)),
                 errors => Problem(errors));

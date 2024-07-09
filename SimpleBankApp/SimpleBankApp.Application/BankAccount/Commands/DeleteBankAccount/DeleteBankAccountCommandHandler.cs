@@ -1,12 +1,13 @@
 ﻿using ErrorOr;
 using MapsterMapper;
+using MediatR;
 using SimpleBankApp.Application.Common.Interfaces.Persistance;
 using SimpleBankApp.Domain.Common.Errors;
 
 
 namespace SimpleBankApp.Application.BankAccount.Commands.DeleteBankAccount
 {
-    public class DeleteBankAccountCommandHandler : IDeleteBankAccountCommandHandler
+    public class DeleteBankAccountCommandHandler : IRequestHandler<DeleteBankAccountCommand, ErrorOr<DeleteBankAccountCommandResponse>>
     {
         private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IMapper _mapper;
@@ -19,7 +20,7 @@ namespace SimpleBankApp.Application.BankAccount.Commands.DeleteBankAccount
             _mapper = mapper;
         }
 
-        public async Task<ErrorOr<DeleteBankAccountCommandResponse>> Handle(DeleteBankAccountCommand command)
+        public async Task<ErrorOr<DeleteBankAccountCommandResponse>> Handle(DeleteBankAccountCommand command, CancellationToken cancellationToken)
         {
             var existingBankAccount = await _bankAccountRepository.GetBankAccount(command.AccountId, command.UserId);
             if (existingBankAccount == null)
@@ -40,10 +41,5 @@ namespace SimpleBankApp.Application.BankAccount.Commands.DeleteBankAccount
 
             return new DeleteBankAccountCommandResponse { IsDeleted = true };
         }
-    }
-
-    public interface IDeleteBankAccountCommandHandler
-    {
-        Task<ErrorOr<DeleteBankAccountCommandResponse>> Handle(DeleteBankAccountCommand command);
     }
 }
