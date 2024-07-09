@@ -1,6 +1,6 @@
 ﻿namespace SimpleBankApp.Application.BankAccount.Queries.GetBankAccount
 {
-    public class GetBankAccountCommandResponse
+    public class GetBankAccountQueryResponse
     {
         public Guid AccountId { get; set; }
         public decimal Balance { get; set; } = 0;

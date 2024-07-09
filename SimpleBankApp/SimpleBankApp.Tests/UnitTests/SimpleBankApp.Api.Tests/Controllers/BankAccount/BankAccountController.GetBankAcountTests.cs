@@ -23,12 +23,12 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
         private readonly BankAccountController _controller;
 
         private readonly Mock<IMediator> _mockMediator;
-        private readonly Mock<IGetBankAccountCommandHandler> _mockGetBankAccountCommandHandler;
+        private readonly Mock<IGetBankAccountQueryHandler> _mockGetBankAccountCommandHandler;
         
         public BankAccountControllerGetBankAccountTests()
         {
             _mockMediator = new Mock<IMediator>();
-            _mockGetBankAccountCommandHandler = new Mock<IGetBankAccountCommandHandler>();
+            _mockGetBankAccountCommandHandler = new Mock<IGetBankAccountQueryHandler>();
             _mockMapper = new Mock<IMapper>();
             _mockHttpContextService = new Mock<IHttpContextService>();
 
@@ -50,14 +50,14 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
             var accountId = Guid.NewGuid();
             var balance = 100;
             var lastUpdatedOn = DateTime.UtcNow;
-            var commandResponse = new GetBankAccountCommandResponse { AccountId = accountId, Balance = balance, LastUpdatedOn = lastUpdatedOn };
+            var commandResponse = new GetBankAccountQueryResponse { AccountId = accountId, Balance = balance, LastUpdatedOn = lastUpdatedOn };
 
             _mockHttpContextService
                 .Setup(service => service.GetUserId())
                 .Returns(userId);
 
             _mockGetBankAccountCommandHandler
-                .Setup(handler => handler.Handle(It.IsAny<GetBankAccountCommand>()))
+                .Setup(handler => handler.Handle(It.IsAny<GetBankAccountQuery>()))
                 .ReturnsAsync(commandResponse);
 
             _mockMapper
@@ -90,11 +90,11 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
                 .Returns(userId);
 
             _mockGetBankAccountCommandHandler
-                .Setup(handler => handler.Handle(It.IsAny<GetBankAccountCommand>()))
+                .Setup(handler => handler.Handle(It.IsAny<GetBankAccountQuery>()))
                 .ReturnsAsync(commandResponse);
 
             _mockMapper
-                .Setup(mapper => mapper.Map<GetBankAccountResponse>(It.IsAny<GetBankAccountCommandResponse>()))
+                .Setup(mapper => mapper.Map<GetBankAccountResponse>(It.IsAny<GetBankAccountQueryResponse>()))
                 .Returns(new GetBankAccountResponse());
 
             // Act

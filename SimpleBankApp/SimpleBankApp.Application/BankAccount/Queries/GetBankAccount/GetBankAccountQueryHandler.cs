@@ -7,12 +7,12 @@ using SimpleBankApp.Domain.Entities;
 
 namespace SimpleBankApp.Application.BankAccount.Queries.GetBankAccount
 {
-    public class GetBankAccountCommandHandler : IGetBankAccountCommandHandler
+    public class GetBankAccountQueryHandler : IGetBankAccountQueryHandler
     {
         private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IMapper _mapper;
 
-        public GetBankAccountCommandHandler(
+        public GetBankAccountQueryHandler(
             IBankAccountRepository bankAccountRepository, 
             IMapper mapper)
         {
@@ -20,7 +20,7 @@ namespace SimpleBankApp.Application.BankAccount.Queries.GetBankAccount
             _mapper = mapper;
         }
 
-        public async Task<ErrorOr<GetBankAccountCommandResponse>> Handle(GetBankAccountCommand command)
+        public async Task<ErrorOr<GetBankAccountQueryResponse>> Handle(GetBankAccountQuery command)
         {
             var bankAccount = await _bankAccountRepository.GetBankAccount(command.AccountId, command.UserId);
             if (bankAccount == null)
@@ -28,12 +28,12 @@ namespace SimpleBankApp.Application.BankAccount.Queries.GetBankAccount
                 return Errors.BankAccount.BankAccountNotFound;
             }
 
-            return _mapper.Map<GetBankAccountCommandResponse>(bankAccount);
+            return _mapper.Map<GetBankAccountQueryResponse>(bankAccount);
         }
     }
 
-    public interface IGetBankAccountCommandHandler
+    public interface IGetBankAccountQueryHandler
     {
-        Task<ErrorOr<GetBankAccountCommandResponse>> Handle(GetBankAccountCommand command);
+        Task<ErrorOr<GetBankAccountQueryResponse>> Handle(GetBankAccountQuery command);
     }
 }

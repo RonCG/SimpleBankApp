@@ -27,7 +27,7 @@ namespace SimpleBankApp.Api.Controllers
         private readonly IAuthenticationService _authenticationService;
 
         private readonly IMediator _mediator;
-        private readonly IGetBankAccountCommandHandler _getBankAccountCommandHandler;
+        private readonly IGetBankAccountQueryHandler _getBankAccountCommandHandler;
 
         public BankAccountController(
             ILogger<BankAccountController> logger,
@@ -35,7 +35,7 @@ namespace SimpleBankApp.Api.Controllers
             IHttpContextService httpContextService,
             IAuthenticationService authenticationService,
             IMediator mediator,
-            IGetBankAccountCommandHandler getBankAccountCommandHandler)
+            IGetBankAccountQueryHandler getBankAccountCommandHandler)
         {
             _logger = logger;
             _mapper = mapper;
@@ -64,7 +64,7 @@ namespace SimpleBankApp.Api.Controllers
         [HttpGet("{accountId}")]
         public async Task<IActionResult> GetBankAccount([FromRoute] Guid accountId)
         {
-            var getBankAccountCommand = new GetBankAccountCommand
+            var getBankAccountCommand = new GetBankAccountQuery
             {
                 UserId = _httpContextService.GetUserId(),
                 AccountId = accountId

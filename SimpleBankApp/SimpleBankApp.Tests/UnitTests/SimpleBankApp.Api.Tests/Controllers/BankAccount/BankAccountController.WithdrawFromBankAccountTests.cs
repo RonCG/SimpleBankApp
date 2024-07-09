@@ -24,12 +24,12 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Api.Tests.Controllers.Bank
         private readonly BankAccountController _controller;
 
         private readonly Mock<IMediator> _mockMediator;
-        private readonly Mock<IGetBankAccountCommandHandler> _mockGetBankAccountCommandHandler;
+        private readonly Mock<IGetBankAccountQueryHandler> _mockGetBankAccountCommandHandler;
 
         public BankAccountControllerWithdrawFromTests()
         {
             _mockMediator = new Mock<IMediator>();
-            _mockGetBankAccountCommandHandler = new Mock<IGetBankAccountCommandHandler>();
+            _mockGetBankAccountCommandHandler = new Mock<IGetBankAccountQueryHandler>();
             _mockMapper = new Mock<IMapper>();
             _mockHttpContextService = new Mock<IHttpContextService>();
 

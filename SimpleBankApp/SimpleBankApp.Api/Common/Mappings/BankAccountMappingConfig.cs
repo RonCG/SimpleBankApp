@@ -18,7 +18,7 @@ namespace SimpleBankApp.Api.Common.Mappings
         {
             config.NewConfig<CreateBankAccountCommandResponse, CreateBankAccountResponse>()
                 .Map(dest => dest.AccountId, src => src.Id);
-            config.NewConfig<GetBankAccountCommandResponse, GetBankAccountResponse>();
+            config.NewConfig<GetBankAccountQueryResponse, GetBankAccountResponse>();
             config.NewConfig<DepositInBankAccountCommandResponse, DepositInBankAccountResponse>();
             config.NewConfig<WithdrawFromBankAccountCommandResponse, WithdrawFromBankAccountResponse>();
             config.NewConfig<DeleteBankAccountCommandResponse, DeleteBankAccountResponse>();

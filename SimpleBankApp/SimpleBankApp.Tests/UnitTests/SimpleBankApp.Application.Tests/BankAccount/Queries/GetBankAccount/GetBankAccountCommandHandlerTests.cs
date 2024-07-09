@@ -12,13 +12,13 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAcco
     {
         private readonly Mock<IBankAccountRepository> _mockBankAccountRepository;
         private readonly Mock<IMapper> _mockMapper;
-        private readonly GetBankAccountCommandHandler _handler;
+        private readonly GetBankAccountQueryHandler _handler;
 
         public GetBankAccountCommandHandlerTests()
         {
             _mockBankAccountRepository = new Mock<IBankAccountRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new GetBankAccountCommandHandler(_mockBankAccountRepository.Object, _mockMapper.Object);
+            _handler = new GetBankAccountQueryHandler(_mockBankAccountRepository.Object, _mockMapper.Object);
         }
 
         [Fact]
@@ -29,16 +29,16 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAcco
             var accountId = Guid.NewGuid();
             var balance = 1000;
             var lastUpdatedOn = DateTime.Now;
-            var command = new GetBankAccountCommand { UserId = userId, AccountId = accountId };
+            var command = new GetBankAccountQuery { UserId = userId, AccountId = accountId };
             var bankAccountEntity = new BankAccountEntity { Id = accountId, UserId = userId, Balance = balance };
-            var bankAccountResponse = new GetBankAccountCommandResponse { AccountId = accountId, Balance = balance, LastUpdatedOn = lastUpdatedOn };
+            var bankAccountResponse = new GetBankAccountQueryResponse { AccountId = accountId, Balance = balance, LastUpdatedOn = lastUpdatedOn };
 
             _mockBankAccountRepository
                 .Setup(repo => repo.GetBankAccount(accountId, userId))
                 .ReturnsAsync(bankAccountEntity);
 
             _mockMapper
-                .Setup(mapper => mapper.Map<GetBankAccountCommandResponse>(It.IsAny<BankAccountEntity>()))
+                .Setup(mapper => mapper.Map<GetBankAccountQueryResponse>(It.IsAny<BankAccountEntity>()))
                 .Returns(bankAccountResponse);
 
             // Act
@@ -46,7 +46,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAcco
 
             // Assert
             result.Should().NotBeNull();
-            result.Value.Should().BeOfType<GetBankAccountCommandResponse>();
+            result.Value.Should().BeOfType<GetBankAccountQueryResponse>();
             result.Value.Should().NotBeNull();
             result.Value.AccountId.Should().Be(accountId);
             result.Value.Balance.Should().Be(balance);
@@ -59,7 +59,7 @@ namespace SimpleBankApp.Tests.UnitTests.SimpleBankApp.Application.Tests.BankAcco
             // Arrange
             var userId = Guid.NewGuid();
             var accountId = Guid.NewGuid();
-            var command = new GetBankAccountCommand { UserId = userId, AccountId = accountId };
+            var command = new GetBankAccountQuery { UserId = userId, AccountId = accountId };
             var error =  Errors.BankAccount.BankAccountNotFound;
 
             _mockBankAccountRepository

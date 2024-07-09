@@ -16,7 +16,7 @@ namespace SimpleBankApp.Application.Common.Mappings
                 .Map(dest => dest.AccountId, src => src.Id);
             config.NewConfig<BankAccountEntity, WithdrawFromBankAccountCommandResponse>()
                 .Map(dest => dest.AccountId, src => src.Id);
-            config.NewConfig<BankAccountEntity, GetBankAccountCommandResponse>()
+            config.NewConfig<BankAccountEntity, GetBankAccountQueryResponse>()
                 .Map(dest => dest.AccountId, src => src.Id);
         }
     }
