@@ -61,4 +61,12 @@ POST http://localhost:5000/simple-bank/account
 
 ---
 
+
+Seq server can be used to better visualize the application logs. It can be accessed at:
+```
+http://localhost:8081
+```
+
+---
+
 For more details about the design and implementation of the app, please refer to the Documentation.pdf file.
