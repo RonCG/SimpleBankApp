@@ -70,3 +70,17 @@ http://localhost:8081
 ---
 
 For more details about the design and implementation of the app, please refer to the Documentation.pdf file.
+
+
+---
+
+
+# AI Implementation
+### 24/7 Customer Service
+Users are getting more used to "talking" to computers in natural language, so this is something that can be added to the application. Lets imagine we as a bank have a call center or a chatbot, ideally our customers should be able to say or type whatever they need in natural language and the application should be able to execute the requested action succesfully. This could be implemented for common queries like account balance or loan details. 
+
+### Personalized Recommendations
+AI can be implemented to recognize a customer behavior and suggest investment opportunities, loan options, personalized interest rates, or credit card offers. 
+
+### Fraud Detection
+Using AI better fraud detection systems can be implemented, since AI should be capable of detecting anomalies in a customer behavior, preventing unauthorized transactions in a personalized manner.  
